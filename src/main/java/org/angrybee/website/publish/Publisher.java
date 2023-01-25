@@ -19,7 +19,6 @@ package org.angrybee.website.publish;
 import java.io.File;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.angrybee.website.publish.utils.FileUtils;
@@ -56,7 +55,7 @@ public class Publisher {
 
 	public static void main (String[] argv) {
 		
-		
+		//TODO #1
 		String pictureTitle = argv[0];
 		String author = argv[1];
 		String date_publishing = argv[2];
