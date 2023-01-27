@@ -177,6 +177,9 @@ public class PublisherDefault implements Publisher {
 		return new File(getClassLoader().getResource(filename).getFile());
 	}
 
+	/**
+	 * Main method to describe the full process of publication
+	 */
 	@Override
 	public void publish() {
 		// TODO Auto-generated method stub
