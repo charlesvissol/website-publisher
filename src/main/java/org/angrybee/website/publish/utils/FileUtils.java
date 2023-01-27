@@ -98,8 +98,8 @@ public class FileUtils {
     /**
      * Write a text file directly from String content
      * 
-     * @param p_File Chemin Full path of the file to write
-     * @param p_FileContent String content to write in the file
+     * @param file Chemin Full path of the file to write
+     * @param fileContent String content to write in the file
      * @throws IOException
      */
     public static void writeFromString(String file, String fileContent) throws IOException
@@ -128,7 +128,7 @@ public class FileUtils {
     /**
      * Get recursive paths of files inside a directory
      * @param file Fichier de base pour le parcours.
-     * @param <b>true</b> if return the full path of files, <b>false</b> if return only the name of file
+     * @param isPath <b>true</b> if return the full path of files, <b>false</b> if return only the name of file
      */
     private void list(File file, boolean isPath)
     {
