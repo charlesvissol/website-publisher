@@ -43,16 +43,20 @@ import org.jsoup.nodes.Element;
 public class PublisherDefault implements Publisher {
 
 
+	/**
+	 * Logger initialization
+	 */
 	static final Logger logger = Logger.getLogger(PublisherDefault.class.getName());
 
 	/**
-	 * properties file
+	 * properties file initialization
 	 */
-	private static ResourceBundle resources;
+	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherDefault.class.getName());
 
-	private PublisherDefault(){
-		//Initialization of the access to the properties file
-		resources = ResourceBundle.getBundle(PublisherDefault.class.getName());
+	/**
+	 * Empty constructor
+	 */
+	public PublisherDefault(){
 	}
 
 	public static void main (String[] argv) {
@@ -182,7 +186,7 @@ public class PublisherDefault implements Publisher {
 	 */
 	@Override
 	public void publish() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

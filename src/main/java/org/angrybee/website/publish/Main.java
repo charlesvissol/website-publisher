@@ -15,12 +15,25 @@ limitations under the License.
 
 package org.angrybee.website.publish;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Entry point of the application when used as common application
+ * Entry point of the application.<br>
+ * We use the Adapter Pattern.<br>
+ * The {@link org.angrybee.website.publish.Main} class call {@link org.angrybee.website.publish.Publisher} interface 
+ * implementation:<br>
+ * <ul>
+ * <li>By default it is {@link org.angrybee.website.publish.impl.PublisherDefault} class</li>
+ * <li>By extension, it could be any custom implementation of {@link org.angrybee.website.publish.Publisher} interface</li>
+ * </ul>
+ * The classname of the {@link org.angrybee.website.publish.Publisher} implementation is in <code>Main.properties</code> but you can 
+ * overwrite this class name by put the new classname in main() method argument:<br>
+ * Example:<br>
+ *     <code>java org.angrybee.website.publish.Main org.angrybee.website.publish.impl.PublisherCustom</code>
  * @author Charles Vissol
  */
 public class Main {
@@ -33,43 +46,76 @@ public class Main {
 	private static ResourceBundle resources;
     
 
+    /**
+     * Entry point of the application.
+     * The main() method accept optionally one argument to overwrite the Main.properties value (Default 
+     * {@link org.angrybee.website.publish.Publisher} implementation).
+     * @param args {@link org.angrybee.website.publish.Publisher} implementation alternative
+     */
     public static void main(String[] args) {
 
-		//Initialization of the access to the properties file
-		resources = ResourceBundle.getBundle(Main.class.getName());    
-        String publisherClassname = resources.getString("publisher");    
+        String publisherClassname = null;
 
-        Class<Publisher> publisher = null;
-        
+        /**
+         * If no argument, get value in the properies file
+         */
+        if(args.length == 0){
+            resources = ResourceBundle.getBundle(Main.class.getName());    
+            publisherClassname = resources.getString("publisher");  
+        } else {
+            publisherClassname = args[0];
+        }
+
+		//Initialization of the access to the properties file
+  
+
+        Class<?> loadClass = null;
+        Publisher publisher = null;
+        Constructor<?> cons = null;
 
         try {
 
-            publisher = (Class<Publisher>) Class.forName(publisherClassname);
-            publisher.getDeclaredConstructor().newInstance();
+            /**
+             * Here the program find the classname (stored in Main.properties by default or retrieved from command line argument
+             */
+            loadClass = Class.forName(publisherClassname);
+            
+            logger.log(Level.WARNING, "Publisher implementation classname is {0}", publisherClassname);
+            
+            cons = loadClass.getDeclaredConstructor();
+            
+            publisher = (Publisher) cons.newInstance();
+            
 
         } catch (ClassNotFoundException e) {
-            logger.fine(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
         } catch (InstantiationException e) {
-            
-            logger.fine(e.getMessage());
-        } catch (IllegalAccessException e) {
-            
-            logger.fine(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            
-            logger.fine(e.getMessage());
-        } catch (InvocationTargetException e) {
-            
-            logger.fine(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
         } catch (NoSuchMethodException e) {
-            
-            logger.fine(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
+        } catch (IllegalAccessException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        } catch (InvocationTargetException e) {
+            logger.log(Level.SEVERE, e.getMessage());
         } catch (SecurityException e) {
-            
-            logger.fine(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
         }
 
+        /**
+         * Call the Interface method but run the class method (Adaptor pattern)
+         */
+        
+        if(publisher != null) {
+            logger.log(Level.WARNING, "Publisher implementation variable name is {0}",publisher.toString());
 
+            publisher.publish();
+
+        } else {
+            logger.log(Level.SEVERE, "Publisher implementation variable is Null");
+        }
+            
 
     }
 
