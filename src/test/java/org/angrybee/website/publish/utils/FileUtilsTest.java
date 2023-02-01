@@ -65,9 +65,7 @@ public class FileUtilsTest {
         File file = this.getFile("GetStrContent.txt");
         int expected = 204710453;
 
-        /**
-         * Here we 
-         */
+
         String content = FileUtils.getStrContent(file);
 
         assertEquals(expected, content.hashCode());
