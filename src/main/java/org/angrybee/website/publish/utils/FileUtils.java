@@ -58,7 +58,6 @@ public class FileUtils {
 	 * Method to get the String content of a file
 	 * @param file File object representing the file 
 	 * @return String content of the file
-	 * @throws IOException Interrupts the I/O exception in case of problems when writting current text file
 	 */
     public static String getStrContent(File file) {
         FileInputStream fis = null;
@@ -81,7 +80,7 @@ public class FileUtils {
                 try { 
                     fis.close(); 
                 } catch (IOException e) {
-                    logger.log(Level.SEVERE, e.getMessage(), e);
+                    logger.log(Level.SEVERE, e.getMessage());
                 }
             }
         }
@@ -120,7 +119,7 @@ public class FileUtils {
     /**
      * Write a text file directly from String content
      * 
-     * @param file Chemin Full path of the file to write
+     * @param file Full path of the file to write
      * @param fileContent String content to write in the file
      * @throws IOException
      */
