@@ -1,0 +1,7 @@
+### Toolkit to publish Website documentation
+
+- Use pandoc to convert markdown into PDF use pdftext (Latex PDF converter): `sudo apt-get install texlive-latex-base sudo apt-get install texlive-bibtex-extra sudo apt-get install texlive-latex-extra sudo apt-get install texlive-fonts-extra sudo apt-get install texlive-science` `apt-get install wkhtmltopdf` -> for pandoc markdown to pdf `apt install librsvg2-bin` -> convert svg into pdftext
+
+```bash
+pandoc --pdf-engine=xelatex --highlight-style=breezedark Debian_11_secure_
+```
