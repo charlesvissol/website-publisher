@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -71,16 +72,16 @@ public final class Md2Html {
      */
     public static void convert(String inputMarkdownFilePath, String outputHtmlFilePath) {
 
-        logger.fine("Entry into method convertMarkdownToHtml(String,String)");
-        logger.fine(() -> String.format("Input file is %s", inputMarkdownFilePath));
-        logger.fine(() -> String.format("Outpu file is %s", outputHtmlFilePath));
+        logger.log(Level.FINE, "Entry into method convertMarkdownToHtml(String,String)");
+        logger.log(Level.FINE, () -> String.format("Input file is %s", inputMarkdownFilePath));
+        logger.log(Level.FINE, () -> String.format("Outpu file is %s", outputHtmlFilePath));
 
         try {
             String markdownContent = new String(Files.readAllBytes(Paths.get(inputMarkdownFilePath)), StandardCharsets.UTF_8);
             String outputHtml = convert(markdownContent);
             Files.write(Paths.get(outputHtmlFilePath), outputHtml.getBytes());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }

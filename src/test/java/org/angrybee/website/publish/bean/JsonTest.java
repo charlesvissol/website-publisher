@@ -24,6 +24,21 @@ public class JsonTest {
     @Test
     void testRead() {
 
+        PublisherDefaultBean bean = new PublisherDefaultBean();
+        testWrite();
+        String jsonPath = System.getProperty("java.io.tmpdir") + "/publisher.json";
+        bean = (PublisherDefaultBean) Json.read(jsonPath, bean);
+
+        System.out.println(bean.getAuthor());
+        System.out.println(bean.getDate());
+        System.out.println(bean.getMarkdown());
+        System.out.println(bean.getTitle());
+
+        assertTrue(bean.getAuthor().contentEquals("Charles Vissol"));
+        assertTrue(bean.getDate().contentEquals("February 2, 2023"));
+        assertTrue(bean.getMarkdown().contentEquals("/tmp/toto.md"));
+        assertTrue(bean.getTitle().contentEquals("/tmp/title.png"));
+
     }
 
     @Test
@@ -36,7 +51,7 @@ public class JsonTest {
         bean.setTitle("/tmp/title.png");
 
 
-        Json.write("/tmp/publisher.json", bean);
+        Json.write(System.getProperty("java.io.tmpdir") + "/publisher.json", bean);
 
         assertTrue(true);
 

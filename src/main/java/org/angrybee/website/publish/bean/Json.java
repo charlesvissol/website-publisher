@@ -34,6 +34,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class Json {
 
+    /**
+     * Private consructor to avoid instantiation
+     */
+    private Json(){}
 	/**
 	 * Logger initialization
 	 */
@@ -45,7 +49,7 @@ public class Json {
      * @param bean {@link org.angrybee.website.publish.bean.PublisherBean} implementation
      * @return {@link org.angrybee.website.publish.bean.PublisherBean} implementation with data
      */
-    public static void read(String jsonPath, PublisherBean bean){
+    public static PublisherBean read(String jsonPath, PublisherBean bean){
 
         ObjectMapper mapper = new ObjectMapper();
         File json = new File(jsonPath);
@@ -57,7 +61,7 @@ public class Json {
         } catch (IOException | NullPointerException e) {
            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-
+        return bean;
     }
 
 

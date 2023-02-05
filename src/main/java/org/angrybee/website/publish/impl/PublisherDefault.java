@@ -93,7 +93,7 @@ public class PublisherDefault implements Publisher {
 
 		
 		//Load Json data
-		Json.read(jsonPath, publisherBeanImpl);
+		publisherBeanImpl = (PublisherDefaultBean) Json.read(jsonPath, publisherBeanImpl);
 
 
 		//Load template HTML file
@@ -114,10 +114,10 @@ public class PublisherDefault implements Publisher {
 
 		//add tag's information to target HTML
 		Element title = HTMLUtils.id(doc, "publisher.title");
-		title.attr("src", String.format("titles/{0}", publisherBeanImpl.getTitle()));
+		title.attr("src", String.format("titles/%s", publisherBeanImpl.getTitle()));
 
 		Element authorDate = HTMLUtils.id(doc, "publisher.author.date");
-		authorDate.text(String.format("{0} {1}}", publisherBeanImpl.getAuthor(), publisherBeanImpl.getDate()));
+		authorDate.text(String.format("%s %s}", publisherBeanImpl.getAuthor(), publisherBeanImpl.getDate()));
 
 		//Load the file content in String
 		File mdFile = new File(publisherBeanImpl.getMarkdown());
