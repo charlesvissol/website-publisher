@@ -26,6 +26,7 @@ import org.jsoup.nodes.Element;
 /**
  * This class is dedicated to HTML operations using Jsoup library.<br>
  * It means that it works only with Jsoup library.
+ * @author Charles Vissol
  */
 public class HTMLUtils {
     

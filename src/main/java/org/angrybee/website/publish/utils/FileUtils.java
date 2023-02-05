@@ -103,16 +103,20 @@ public class FileUtils {
     	try {
     	
 	        lFos = new FileOutputStream(pathFile);
-	        byte buff[] = new byte[1024];
+	        byte[] buff = new byte[1024];
 	        int cnt = -1;
+
 	        while ((cnt = sourceFile.read(buff)) != -1) {
 	            lFos.write(buff, 0, cnt);
-	        }            throw new IllegalArgumentException("file not found! " + pathFile);
+	        }            throw new IllegalArgumentException(String.format("File not found! %s ", pathFile));
 
+
+            
     	} catch(IOException e) {
     		logger.info(e.getMessage());
     	} finally {
-            lFos.close();
+            if(lFos != null)
+                lFos.close();
         }
     }
     
@@ -141,7 +145,8 @@ public class FileUtils {
 		} catch (Exception e) {
 			logger.info(e.getMessage());
 		} finally {
-            out.close();
+            if(out != null)
+                out.close();
         }   	
     
     } 

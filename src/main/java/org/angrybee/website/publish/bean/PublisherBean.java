@@ -13,14 +13,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package org.angrybee.website.publish.utils;
+package org.angrybee.website.publish.bean;
 
-import java.time.LocalTime;
+/**
+ * 
+ */
+public interface PublisherBean {
+    
 
-public class Main {
-    public static void main(String[] args) {
-        long millis = LocalTime.now().toNanoOfDay(); 
-        System.out.println(millis);
-    }
+
+
 }
-

@@ -1,3 +1,20 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic"
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "githubIssues.ignoreUserCompletionTrigger": [
+        "python"
+    ],
+    "[css]": {
+        "editor.suggest.insertMode": "replace",
+        "gitlens.codeLens.scopes": [
+            "document"
+        ],
+        "editor.autoIndent": "advanced"
+    },
+    "githubPullRequests.ignoredPullRequestBranches": [
+        "main"
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "http-localhost-9000",
+        "projectKey": "website-publisher"
+    }
 }

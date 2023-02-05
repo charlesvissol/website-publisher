@@ -15,13 +15,34 @@ limitations under the License.
 
 package org.angrybee.website.publish;
 
+import org.angrybee.website.publish.bean.PublisherBean;
+
 /**
  * Interface that represents the main process of publication
+ * @author Charles Vissol
  */
 public interface Publisher {
     
+
+
     /**
-     * Generic method where 
+     * Get {@link org.angrybee.website.publish.bean.PublisherBean} implementation depending 
+     * on the Publishing process.
+     * @param publisherBeanImpl {@link org.angrybee.website.publish.bean.PublisherBean} implementation
+     */
+    public void getBean(PublisherBean publisherBeanImpl);
+
+
+    /**
+     * Get the Json file containing the values of the 
+     * {@link org.angrybee.website.publish.bean.PublisherBean} implementation onject
+     * @param path Full path of the Json file
+     */
+    public void getJson(String path);
+
+
+    /**
+     * Generic method to implement if you want to create your own chain of publishing
      */
     public void publish();
 

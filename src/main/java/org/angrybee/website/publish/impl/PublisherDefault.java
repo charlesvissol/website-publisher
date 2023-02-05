@@ -21,7 +21,10 @@ import java.time.LocalTime;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
+import org.angrybee.website.publish.bean.Json;
 import org.angrybee.website.publish.Publisher;
+import org.angrybee.website.publish.bean.PublisherBean;
+import org.angrybee.website.publish.bean.PublisherDefaultBean;
 import org.angrybee.website.publish.utils.FileUtils;
 import org.angrybee.website.publish.utils.HTMLUtils;
 import org.angrybee.website.publish.utils.Md2Html;
@@ -39,9 +42,9 @@ import org.jsoup.nodes.Element;
  * <code>template</code> variable represents the name of the HTML file which is the HTML template where the markdown.<br>
  * <code>tempDir</code> variable represents the path of the temporary directory where the transformation process runs
  * <img alt="openlogo" src="doc-files/openlogo.svg"/>//TODO
+ * @author Charles Vissol
  */
 public class PublisherDefault implements Publisher {
-
 
 	/**
 	 * Logger initialization
@@ -53,83 +56,79 @@ public class PublisherDefault implements Publisher {
 	 */
 	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherDefault.class.getName());
 
-	/**
-	 * Empty constructor
-	 */
-	public PublisherDefault(){
+
+	private PublisherDefaultBean publisherBeanImpl;
+
+	private String jsonPath;
+
+
+	@Override
+	public void getBean(PublisherBean publisherBeanImpl) {
+		this.publisherBeanImpl = (PublisherDefaultBean) publisherBeanImpl;
+		
 	}
 
-	public static void main (String[] argv) {
+
+	@Override
+	public void getJson(String path) {
+		this.jsonPath = path;
 		
-		//TODO@charlesvissol #1 Try to design input parameters inside an input file. Describe the input in the javadoc 
-		//or the site documentation.
-		String pictureTitle = argv[0];
-		String author = argv[1];
-		String date_publishing = argv[2];
-		String markdown_path = argv[3];
-
-		String template_path = argv[4];
-		String temp_dir = argv[5];
+	}
 
 
-		PublisherDefault publisher = new PublisherDefault();
-
-		File file = null;
+	/**
+	 * Main method to describe the full process of publication
+	 */
+	@Override
+	public void publish() {
 
 		String template = resources.getString("template");
-		String tempDir = resources.getString("temp.directory");
+		
 		String newFile = resources.getString("new.file");
 
-		long workDir = LocalTime.now().toNanoOfDay(); 
+		String tempDir = System.getProperty("java.io.tmpdir");
+
+		//Long value corresponding to the working directory in /tmp
+		long workDir = LocalTime.now().toNanoOfDay();
 
 		
+		//Load Json data
+		Json.read(jsonPath, publisherBeanImpl);
 
-		if(template.length() == 0){//Case where properties is empty = no template file defined
-			file = publisher.getFile("article.html");
-			logger.fine("template variable is empty");
-		} else {
-			file = publisher.getFile(template);
-			logger.fine(String.format("template variable = {0}", template));
-		} 
 
-		if(tempDir.length() == 0){
-			tempDir = System.getProperty("java.io.tmpdir");
-			logger.fine(String.format("tempDir variable from system = {0}",tempDir));
+		//Load template HTML file
+		ClassLoader classLoader = getClass().getClassLoader();
+		File fileTemplate = new File(classLoader.getResource(template).getFile());
+
+		//Create the working directory
+		File tmpWkDir = new File(tempDir + File.separator + String.valueOf(workDir));
+		if (!tmpWkDir.exists()) {
+			tmpWkDir.mkdir();
 		}
 
+		//Duplicate template HTML template into target HTML
+		FileUtils.duplicate(fileTemplate.getPath(), tempDir + File.separator + String.valueOf(workDir) + newFile);
 
-		//Duplicate HTML template into target HTML
-		FileUtils.duplicate(file.getPath(), tempDir + File.separator + newFile);
-
-		//Create temporary HTML file (for Markdown to HTML conversion)
-		File tmpHtml = new File(tempDir + File.separator);
-
-		//Parse the new File, copy of the HTML template
-		Document doc = HTMLUtils.doc(new File(tempDir + File.separator + newFile));
+		//Parse the new File (copy of the HTML template)
+		Document doc = HTMLUtils.doc(new File(tempDir + File.separator + String.valueOf(workDir) + newFile));
 
 		//add tag's information to target HTML
 		Element title = HTMLUtils.id(doc, "publisher.title");
-		title.attr("src", String.format("titles/{0}", pictureTitle));
+		title.attr("src", String.format("titles/{0}", publisherBeanImpl.getTitle()));
 
 		Element authorDate = HTMLUtils.id(doc, "publisher.author.date");
-		authorDate.text(String.format("{0} {1}}", author, date_publishing));
+		authorDate.text(String.format("{0} {1}}", publisherBeanImpl.getAuthor(), publisherBeanImpl.getDate()));
+
+		//Load the file content in String
+		File mdFile = new File(publisherBeanImpl.getMarkdown());
+		//Convert the Markdown string into HTML string
+		String html = Md2Html.convert(FileUtils.getStrContent(mdFile));		
+		//Add html content (from markdown conversion)
+		Element content = HTMLUtils.id(doc, "publisher.content");
+		content.text(html);
 
 
-		//Convert Markdown content to HTML content
-		Md2Html.convert(markdown_path, newFile);
-
-
-//id="publisher.content"
-
-
-		//add meta information 
-
-
-		
-
-
-		//Post-modif for additionnal tags
-		
+		//TODO Add meta informations
 		/**
 		 * <pre><i class="bi bi-clipboard ab-xlarge ab-clip-pos" onclick="copyCode(event,'$identifier')"></i><code id="$identifier" class="language-bash">
          *       </code></pre>
@@ -140,59 +139,8 @@ public class PublisherDefault implements Publisher {
 		 * 
 		 * 
 		 * 
-		 */
-
-
-
-
-		
-
-
-
-
-		
-
-
-		
-
-
-
-		
-
-
+		 */	
 	}
-
-	/**
-	 * Return the class loader to get resources files
-	 * @return class loader for the {@link org.angrybee.website.publish.impl.PublisherDefault} class
-	 */
-	private ClassLoader getClassLoader(){
-		return getClass().getClassLoader();
-	}
-
-
-	/**
-	 * Get {@link java.io.File} instance using the class loader.
-	 * Means the file is in src/main/resources 
-	 * @param filename Full Path of the file 
-	 * @return File in the class loader resource directory
-	 */
-	private File getFile(String filename){
-		return new File(getClassLoader().getResource(filename).getFile());
-	}
-
-	/**
-	 * Main method to describe the full process of publication
-	 */
-	@Override
-	public void publish() {
-		
-		
-	}
-
-
-
-
 
 
 
