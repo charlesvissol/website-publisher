@@ -22,8 +22,6 @@ import org.angrybee.website.publish.bean.PublisherBean;
  * @author Charles Vissol
  */
 public interface Publisher {
-    
-
 
     /**
      * Get {@link org.angrybee.website.publish.bean.PublisherBean} implementation depending 
@@ -32,18 +30,10 @@ public interface Publisher {
      */
     public void getBean(PublisherBean publisherBeanImpl);
 
-
-    /**
-     * Get the Json file containing the values of the 
-     * {@link org.angrybee.website.publish.bean.PublisherBean} implementation onject
-     * @param path Full path of the Json file
-     */
-    public void getJson(String path);
-
-
     /**
      * Generic method to implement if you want to create your own chain of publishing
+     * @return {@link org.angrybee.website.publish.Publication} implementation
      */
-    public void publish();
+    public Publication publish();
 
 }

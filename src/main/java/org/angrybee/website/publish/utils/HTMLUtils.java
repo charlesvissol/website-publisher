@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  * This class is dedicated to HTML operations using Jsoup library.<br>
@@ -66,5 +67,31 @@ public class HTMLUtils {
 		
 		return doc.getElementById(idTag);
 	}
-    
+ 
+    /**
+     * Retrieve an element based on an expression Ex: doc.selecFirst("input[checked=true]").
+     * We use here the Jsoup method of {@link org.jsoup.nodes.Document} <code>selectFirst("...")</code> method
+     * @param doc {@link org.jsoup.Jsoup} document
+     * @param expr String representing an expression to filter a specific tag.
+     * @return The {@link org.jsoup.nodes.Element} object selected
+     */
+	public static Element selectOne(Document doc, String expr){
+		
+		return doc.selectFirst(expr);
+	}    
+
+
+    /**
+     * Retrieve a list of {@link org.jsoup.nodes.Element} objects
+     * @param doc {@link org.jsoup.Jsoup} document
+     * @param expr String representing an expression to filter a list of tags.
+     * @return List of {@link org.jsoup.nodes.Element} objects
+     */
+	public static Elements selectAny(Document doc, String expr){
+		
+		return doc.select(expr);
+	}    
+
+
+
 }

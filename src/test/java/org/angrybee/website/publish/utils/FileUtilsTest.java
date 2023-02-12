@@ -49,7 +49,11 @@ public class FileUtilsTest {
             e.printStackTrace();
         }
 
-        FileUtils.delDir(new File(tempDir + File.separator + "fileutils"));
+        try {
+            FileUtils.delDir(new File(tempDir + File.separator + "fileutils"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         //Test if the directory has been deleted recursively
         assertFalse(new File(tempDir + File.separator + "fileutils").exists());

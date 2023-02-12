@@ -15,6 +15,12 @@
 
 package org.angrybee.website.publish.utils;
 
+import com.vladsch.flexmark.ext.abbreviation.AbbreviationExtension;
+import com.vladsch.flexmark.ext.definition.DefinitionExtension;
+import com.vladsch.flexmark.ext.footnotes.FootnoteExtension;
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
+import com.vladsch.flexmark.ext.typographic.TypographicExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Node;
@@ -23,6 +29,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,8 +61,18 @@ public final class Md2Html {
         logger.fine(() -> String.format("Input Markdown content is %s", markdownContent));
         
     	MutableDataSet options = new MutableDataSet();
+
+        options.set(Parser.EXTENSIONS, Arrays.asList(AbbreviationExtension.create(),
+                                                        DefinitionExtension.create(),
+                                                        FootnoteExtension.create(),
+                                                        TablesExtension.create(),
+                                                        TypographicExtension.create(),
+                                                        StrikethroughExtension.create()));
+        options.set(HtmlRenderer.SOFT_BREAK, "<br />\n");
+
         Parser parser = Parser.builder(options).build();
         HtmlRenderer renderer = HtmlRenderer.builder(options).build();
+        
         Node document = parser.parse(markdownContent);
         
 
@@ -75,6 +92,7 @@ public final class Md2Html {
         logger.log(Level.FINE, "Entry into method convertMarkdownToHtml(String,String)");
         logger.log(Level.FINE, () -> String.format("Input file is %s", inputMarkdownFilePath));
         logger.log(Level.FINE, () -> String.format("Outpu file is %s", outputHtmlFilePath));
+
 
         try {
             String markdownContent = new String(Files.readAllBytes(Paths.get(inputMarkdownFilePath)), StandardCharsets.UTF_8);

@@ -16,7 +16,12 @@
 package org.angrybee.website.publish.utils;
 // ! Important to use jupiter API for assertion because it is specific to Junit 5
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.util.List;
 import java.util.logging.Logger;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -35,7 +40,7 @@ class Md2HtmlTest {
 	    "<p><strong>cgroup</strong></p>, **cgroup**",
 		"<h2>Some history</h2>, ## Some history"
 	})
-	void testConvert(String expected, String proceed) {
+	void testConvertStr(String expected, String proceed) {
 		
 		logger.info(proceed);
 		logger.info(expected);
@@ -46,6 +51,35 @@ class Md2HtmlTest {
 		
 	}
 
+	/**
+	 * Method to test the Md to HTML conversion specifically for full 
+	 * @param inputMarkdownFilePath
+	 * @param outputHtmlFilePath
+	 */
+	@Test
+	void testConvertFiles() {
 
+		ClassLoader classLoader = getClass().getClassLoader();
+		File fileTemplate = new File(classLoader.getResource("template.md").getFile());
+
+		Md2Html.convert(fileTemplate.toPath().toString(), System.getProperty("java.io.tmpdir") + File.separator + "template.html");
+
+		File resultExpected = new File(classLoader.getResource("template.html").getFile());		
+		File resultToCompare = new File(System.getProperty("java.io.tmpdir") + File.separator + "template.html");
+
+		List<String> resultListExpected = FileUtils.readLineByLine(resultExpected.toPath().toString());
+		List<String> resultListToCompare = FileUtils.readLineByLine(resultToCompare.toPath().toString());
+
+		//Read Line by line the result/expected file and verify if it is equals
+		for (int i = 0; i < resultListExpected.size(); i++) {
+			assertTrue(resultListExpected.get(i).equals(resultListToCompare.get(i)));
+			logger.info("Expected=" + resultListExpected.get(i) + "||" + resultListToCompare.get(i));
+		  }
+
+
+	
+
+
+	}
 
 }

@@ -19,19 +19,23 @@ package org.angrybee.website.publish.utils;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +53,7 @@ public class FileUtils {
 	/**
 	 * List of strings
 	 */
-	ArrayList<String> listFiles;
+	List<String> listFiles;
 	
 	
 
@@ -60,32 +64,46 @@ public class FileUtils {
 	 * @return String content of the file
 	 */
     public static String getStrContent(File file) {
-        FileInputStream fis = null;
-        StringBuilder result = null;
-        try
+        
+        StringBuilder result = new StringBuilder();
+
+        try (FileInputStream fis = new FileInputStream(file);)
         {
-            result = new StringBuilder();
-            fis = new FileInputStream(file);
+            
             byte[] buff = new byte[1024];
             int cnt = -1;
             while ((cnt = fis.read(buff)) != -1) {
                 result.append(new String(buff, 0, cnt));
             }
-            
+        
         } catch (IOException e){
             logger.log(Level.SEVERE, e.getMessage(), e);
-        }
-        finally {
-            if (fis != null) {
-                try { 
-                    fis.close(); 
-                } catch (IOException e) {
-                    logger.log(Level.SEVERE, e.getMessage());
-                }
-            }
-        }
+        } 
+        
         return result.toString();
     }	
+
+
+    /**
+     * Retrieve the text file content in line by line
+     * @param path Full path of the file
+     * @return List of string lines
+     */
+    public static List<String> readLineByLine(String path) {
+        
+        List<String> listLines = new ArrayList<>();
+        
+        File file = new File(path);
+        try(Scanner sc = new Scanner(file)) {
+            while (sc.hasNextLine())
+                listLines.add(sc.nextLine());
+                
+        } catch (FileNotFoundException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        return listLines;
+    }
 
 
     
@@ -98,11 +116,10 @@ public class FileUtils {
      */
     public static void writeFromStream(InputStream sourceFile, String pathFile) throws IOException{
     	
-        FileOutputStream lFos = null;
-
-    	try {
+        
+    	try (FileOutputStream lFos = new FileOutputStream(pathFile)) {
     	
-	        lFos = new FileOutputStream(pathFile);
+	        
 	        byte[] buff = new byte[1024];
 	        int cnt = -1;
 
@@ -113,11 +130,8 @@ public class FileUtils {
 
             
     	} catch(IOException e) {
-    		logger.info(e.getMessage());
-    	} finally {
-            if(lFos != null)
-                lFos.close();
-        }
+    		logger.log(Level.SEVERE, e.getMessage(), e);
+    	}
     }
     
     /**
@@ -129,25 +143,17 @@ public class FileUtils {
      */
     public static void writeFromString(String file, String fileContent) throws IOException
     {
-        Writer out = null;
-    	try {
-	    	File fileDir = new File(file);
-	    	out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir),StandardCharsets.UTF_8));
+        
+        File fileDir = new File(file); 
+
+    	try(Writer out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileDir),StandardCharsets.UTF_8))) {
 	    	
 	    	out.append(fileContent);
 	    	out.flush();
-	    	out.close();
 	    	
-		} catch (UnsupportedEncodingException e) {
-			logger.info(e.getMessage());
 		} catch (IOException e) {
-			logger.info(e.getMessage());
-		} catch (Exception e) {
-			logger.info(e.getMessage());
-		} finally {
-            if(out != null)
-                out.close();
-        }   	
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}  	
     
     } 
     
@@ -182,8 +188,8 @@ public class FileUtils {
      * @param file Root directory
      * @return List of String representing $file.getName()
      */
-    public ArrayList<String> getFilesName(File file){
-    	listFiles = new ArrayList<String>();
+    public List<String> getFilesName(File file){
+    	listFiles = new ArrayList<>();
     	list(file, false);
     	
     	return listFiles;
@@ -195,8 +201,8 @@ public class FileUtils {
      * @param file Root directory
      * @return List of String representing $file.getAbsolutePath()
      */
-    public ArrayList<String> getPath(File file){
-    	listFiles = new ArrayList<String>();
+    public List<String> getPath(File file){
+    	listFiles = new ArrayList<>();
     	list(file, true);
     	
     	return listFiles;
@@ -235,9 +241,6 @@ public class FileUtils {
             throw new IllegalArgumentException("file not found! " + fileName);
         } else {
 
-            // failed if files have whitespaces or special characters
-            //return new File(resource.getFile());
-
             return new File(resource.toURI());
         }
 
@@ -264,8 +267,8 @@ public class FileUtils {
      * Delete recursively files and directory
      * @param directory Base directory to clean
      */
-    public static boolean delDir(File directory) {
-
+    public static boolean delDir(File directory) throws NoSuchFileException, DirectoryNotEmptyException, IOException {
+        //TODO move from File to Files (java.nio.file.Files#delete)
         if (directory.isDirectory()) {
             File[] files = directory.listFiles();
             if (files != null) {
@@ -277,5 +280,6 @@ public class FileUtils {
 
         return directory.delete();
     }
+
 
 }

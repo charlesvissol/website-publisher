@@ -24,32 +24,33 @@ public class JsonTest {
     @Test
     void testRead() {
 
-        PublisherDefaultBean bean = new PublisherDefaultBean();
+        PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
         testWrite();
         String jsonPath = System.getProperty("java.io.tmpdir") + "/publisher.json";
-        bean = (PublisherDefaultBean) Json.read(jsonPath, bean);
+        bean = (PublisherDefaultHtmlBean) Json.read(jsonPath, bean);
 
         System.out.println(bean.getAuthor());
         System.out.println(bean.getDate());
         System.out.println(bean.getMarkdown());
-        System.out.println(bean.getTitle());
+        System.out.println(bean.getTitleImg());
 
         assertTrue(bean.getAuthor().contentEquals("Charles Vissol"));
         assertTrue(bean.getDate().contentEquals("February 2, 2023"));
         assertTrue(bean.getMarkdown().contentEquals("/tmp/toto.md"));
-        assertTrue(bean.getTitle().contentEquals("/tmp/title.png"));
+        assertTrue(bean.getTitleImg().contentEquals("/tmp/title.png"));
 
     }
 
     @Test
     void testWrite() {
 
-        PublisherDefaultBean bean = new PublisherDefaultBean();
+        PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
         bean.setAuthor("Charles Vissol");
         bean.setDate("February 2, 2023");
         bean.setMarkdown("/tmp/toto.md");
-        bean.setTitle("/tmp/title.png");
+        bean.setTitleImg("/tmp/title.png");
 
+        System.out.println("Write file to " + System.getProperty("java.io.tmpdir") + "/publisher.json");
 
         Json.write(System.getProperty("java.io.tmpdir") + "/publisher.json", bean);
 
