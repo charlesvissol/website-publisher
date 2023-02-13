@@ -16,7 +16,10 @@ limitations under the License.
 package org.angrybee.website.publish.bean;
 
 /**
- * 
+ * Base Interface from whom all the bean inheritate.
+ * The beans inheriting from {@link org.angrybee.website.publish.bean.PublisherBean} set all the variables and 
+ * the values necessary to populate properly the file (HTML, PDF, etc) resulting from the publication process
+ * @author Charles Vissol
  */
 public interface PublisherBean {
     

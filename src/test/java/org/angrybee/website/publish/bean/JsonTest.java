@@ -18,6 +18,9 @@ package org.angrybee.website.publish.bean;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class JsonTest {
@@ -29,15 +32,23 @@ public class JsonTest {
         String jsonPath = System.getProperty("java.io.tmpdir") + "/publisher.json";
         bean = (PublisherDefaultHtmlBean) Json.read(jsonPath, bean);
 
-        System.out.println(bean.getAuthor());
-        System.out.println(bean.getDate());
-        System.out.println(bean.getMarkdown());
-        System.out.println(bean.getTitleImg());
+        assertTrue(bean.getCss().get(0).contentEquals("first.css"));
+        assertTrue(bean.getCss().get(1).contentEquals("second.css"));
 
+        assertTrue(bean.getJs().get(0).contentEquals("first.js"));
+        assertTrue(bean.getJs().get(1).contentEquals("second.js"));
+
+        assertTrue(bean.getTemplate().contentEquals("/tmp/template.html"));
+        assertTrue(bean.getMetaAuthor().contentEquals("Charles Vissol"));
+        assertTrue(bean.getMetaDescription().contentEquals("Description of the article"));
+        assertTrue(bean.getMetaKeywords().contentEquals("article angrybee for publishing"));
+        assertTrue(bean.getMetaIcon().contentEquals("pictures/angrybee.svg"));
+        assertTrue(bean.getMarkdown().contentEquals("/tmp/article.md"));
+        assertTrue(bean.getTitleImg().contentEquals("pictures/title.svg"));
+        assertTrue(bean.getTitleTxt().contentEquals("this is a title"));
         assertTrue(bean.getAuthor().contentEquals("Charles Vissol"));
         assertTrue(bean.getDate().contentEquals("February 2, 2023"));
-        assertTrue(bean.getMarkdown().contentEquals("/tmp/toto.md"));
-        assertTrue(bean.getTitleImg().contentEquals("/tmp/title.png"));
+
 
     }
 
@@ -45,10 +56,26 @@ public class JsonTest {
     void testWrite() {
 
         PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
+        List<String> css = new ArrayList<>();
+        css.add("first.css");
+        css.add("second.css");
+
+        List<String> js = new ArrayList<>();
+        js.add("first.js");
+        js.add("second.js");
+
+        bean.setCss(css);
+        bean.setJs(js);
+        bean.setTemplate("/tmp/template.html");
+        bean.setMetaAuthor("Charles Vissol");
+        bean.setMetaDescription("Description of the article");
+        bean.setMetaKeywords("article angrybee for publishing");
+        bean.setMetaIcon("pictures/angrybee.svg");
+        bean.setMarkdown("/tmp/article.md");
+        bean.setTitleImg("pictures/title.svg");
+        bean.setTitleTxt("this is a title");
         bean.setAuthor("Charles Vissol");
         bean.setDate("February 2, 2023");
-        bean.setMarkdown("/tmp/toto.md");
-        bean.setTitleImg("/tmp/title.png");
 
         System.out.println("Write file to " + System.getProperty("java.io.tmpdir") + "/publisher.json");
 

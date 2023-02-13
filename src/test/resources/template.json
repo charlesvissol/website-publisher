@@ -1,6 +1,14 @@
 {
-  "markdown" : "/tmp/toto.md",
-  "title" : "/tmp/title.png",
+  "css" : [ "first.css", "second.css" ],
+  "js" : [ "first.js", "second.js" ],
+  "metaDescription" : "Description of the article",
+  "metaKeywords" : "article angrybee for publishing",
+  "metaAuthor" : "Charles Vissol",
+  "metaIcon" : "pictures/angrybee.svg",
+  "markdown" : "/tmp/article.md",
+  "template" : "/tmp/template.html",
+  "titleImg" : "pictures/title.svg",
+  "titleTxt" : "this is a title",
   "author" : "Charles Vissol",
   "date" : "February 2, 2023"
 }

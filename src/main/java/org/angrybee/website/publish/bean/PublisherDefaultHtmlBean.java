@@ -15,11 +15,26 @@ limitations under the License.
 
 package org.angrybee.website.publish.bean;
 
+import java.util.List;
+
 /**
- * Bean representing the Default Bean from Markdown to HTML conversion.
- * The bean get the parameters to 
+ * Default Bean for the Markdown to HTML conversion.
+ * @author Charles Vissol
  */
 public class PublisherDefaultHtmlBean implements PublisherBean {
+
+
+
+
+    /**
+     * List of CSS
+     */
+    private List<String> css;
+
+    /**
+     * List of Javascripts
+     */
+    private List<String> js;
 
 
     /**
@@ -49,7 +64,7 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
     private String markdown = null;
 
     /**
-     * Path to the markdown file
+     * Path to the template file
      */
     private String template = null;
 
@@ -73,7 +88,22 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
      */
     private String date = null;
 
+    
+    public List<String> getCss() {
+        return css;
+    }
 
+    public void setCss(List<String> css) {
+        this.css = css;
+    }
+
+    public List<String> getJs() {
+        return js;
+    }
+
+    public void setJs(List<String> js) {
+        this.js = js;
+    }
 
     public String getTemplate() {
         return template;
@@ -82,7 +112,7 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
     public void setTemplate(String template) {
         this.template = template;
     }
-    
+
     public String getMetaAuthor() {
         return metaAuthor;
     }

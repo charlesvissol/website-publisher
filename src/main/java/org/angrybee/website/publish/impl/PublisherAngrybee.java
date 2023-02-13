@@ -42,7 +42,33 @@ import org.jsoup.select.Elements;
  * Once done, we post-process some tags specifically to our needs.
  * <code>template</code> variable represents the name of the HTML file which is the HTML template where the markdown.<br>
  * <code>tempDir</code> variable represents the path of the temporary directory where the transformation process runs
- * <img alt="openlogo" src="doc-files/openlogo.svg"/>//TODO
+ * <img alt="PublisherAngrybee principles" src="doc-files/PublisherAngrybee.png"/>
+ * 
+ * <p>Example of usage:</p>
+ * <code>
+ * 	public static void main(String[] args){
+ *
+ *		PublisherAngrybee pDefault = new PublisherAngrybee();
+ *		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
+ *
+ *		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Linux_boot_usb.md");
+ *		pDefaultBean.setAuthor("Charles Vissol");
+ *		pDefaultBean.setDate("February 13, 2023");
+ *		pDefaultBean.setTitleImg("Linux_boot_usb.png");
+ *		pDefaultBean.setMetaDescription("Pratical Linux tips to create a bootable USB stick from an ISO file");
+ *		pDefaultBean.setMetaKeywords("Linux dd fdisk usb iso boot bootable stick /dev umount");
+ *		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
+ *		pDefaultBean.setTitleTxt("Linux tips, from iso to bootable usb");
+ *
+ *		pDefault.getBean(pDefaultBean);
+ *		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
+ *
+ *		logger.log(Level.INFO, htmlPub.getDocument().html());
+ *
+ *	}
+ * 
+ * </code>
+ * 
  * @author Charles Vissol
  */
 public class PublisherAngrybee implements Publisher {
@@ -53,7 +79,7 @@ public class PublisherAngrybee implements Publisher {
 	static final Logger logger = Logger.getLogger(PublisherAngrybee.class.getName());
 
 	/**
-	 * properties file initialization
+	 * properties file initialization where we specify the HTML page
 	 */
 	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherAngrybee.class.getName());
 
@@ -191,19 +217,24 @@ public class PublisherAngrybee implements Publisher {
 	}
 
 
+	/**
+	 * Main method to run Angrybee publication process.
+	 * The goal is convert Markdown articles to web pages for Angrybee Website
+	 * @param args No args
+	 */
 	public static void main(String[] args){
 
 		PublisherAngrybee pDefault = new PublisherAngrybee();
 		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
 
-		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/@Linux_1_intro_terminal.md");
+		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Linux_boot_usb.md");
 		pDefaultBean.setAuthor("Charles Vissol");
-		pDefaultBean.setDate("February 11, 2023");
-		pDefaultBean.setTitleImg("Linux_1_intro_terminal.png");
-		pDefaultBean.setMetaDescription("Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal");
-		pDefaultBean.setMetaKeywords("Linux terminal shortcut command basics introduction");
+		pDefaultBean.setDate("February 13, 2023");
+		pDefaultBean.setTitleImg("Linux_boot_usb.png");
+		pDefaultBean.setMetaDescription("Pratical Linux tips to create a bootable USB stick from an ISO file");
+		pDefaultBean.setMetaKeywords("Linux dd fdisk usb iso boot bootable stick /dev umount");
 		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
-		pDefaultBean.setTitleTxt("Linux Basics: Terminal survivor kit");
+		pDefaultBean.setTitleTxt("Linux tips, from iso to bootable usb");
 
 		pDefault.getBean(pDefaultBean);
 		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
