@@ -19,7 +19,7 @@ import org.angrybee.website.publish.Publication;
 import org.jsoup.nodes.Document;
 
 /**
- * Representation of an HTML output document
+ * Representation of any HTML output document
  * @author Charles Vissol
  */
 public class PublicationHtml implements Publication {
