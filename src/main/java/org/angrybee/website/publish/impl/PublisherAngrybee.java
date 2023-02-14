@@ -42,10 +42,11 @@ import org.jsoup.select.Elements;
  * Once done, we post-process some tags specifically to our needs.
  * <code>template</code> variable represents the name of the HTML file which is the HTML template where the markdown.<br>
  * <code>tempDir</code> variable represents the path of the temporary directory where the transformation process runs
- * <img alt="PublisherAngrybee principles" src="doc-files/PublisherAngrybee.png"/>
+ * 
+ * <p><img alt="PublisherAngrybee principles" src="doc-files/PublisherAngrybee.png"/></p>
  * 
  * <p>Example of usage:</p>
- * <code>
+ * <pre><code>
  * 	public static void main(String[] args){
  *
  *		PublisherAngrybee pDefault = new PublisherAngrybee();
@@ -66,8 +67,8 @@ import org.jsoup.select.Elements;
  *		logger.log(Level.INFO, htmlPub.getDocument().html());
  *
  *	}
- * 
  * </code>
+ * </pre>
  * 
  * @author Charles Vissol
  */

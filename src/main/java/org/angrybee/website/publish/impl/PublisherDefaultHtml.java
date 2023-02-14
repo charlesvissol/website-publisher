@@ -16,6 +16,7 @@ limitations under the License.
 package org.angrybee.website.publish.impl;
 
 import java.io.File;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,8 +30,15 @@ import org.angrybee.website.publish.utils.HTMLUtils;
 import org.angrybee.website.publish.utils.Md2Html;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
+/**
+ * {@link org.angrybee.website.publish.Publisher} implementation for generic HTML.
+ * It allows conversion of Markdown into HTML
+ * this class uses {@link org.angrybee.website.publish.bean.PublisherDefaultHtmlBean} to manage variables and
+ * {@link org.angrybee.website.publish.impl.PublicationHtml} allows you to get the resulting publication.
+ * 
+ * @author Charles Vissol
+ */
 public class PublisherDefaultHtml implements Publisher {
     
 	/**
@@ -43,6 +51,9 @@ public class PublisherDefaultHtml implements Publisher {
 	 */
 	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherDefaultHtml.class.getName());
 
+	/**
+	 * Default bean implementation
+	 */
 	private PublisherDefaultHtmlBean publisherBeanImpl;
 
 
@@ -60,9 +71,12 @@ public class PublisherDefaultHtml implements Publisher {
 
 		//Get html template
 		String template = resources.getString("template");
+		//Get Makdown templae
+		String input = resources.getString("input");
 
         File fileTemplate = null;
         
+
 		//Load template HTML file: default template if not in the Bean
         if(publisherBeanImpl.getTemplate() != null){
             ClassLoader classLoader = getClass().getClassLoader();
@@ -70,7 +84,6 @@ public class PublisherDefaultHtml implements Publisher {
         } else {
             fileTemplate = new File(publisherBeanImpl.getTemplate());
         }
-
 
 		//Parse the new File (copy of the HTML template)
 		Document doc = HTMLUtils.doc(fileTemplate);
@@ -111,62 +124,59 @@ public class PublisherDefaultHtml implements Publisher {
 			metaIcon.text(publisherBeanImpl.getTitleTxt());
 		 }
 
+		 /**
+		  * Modify HTML header is necessary
+		  */
+		  Element head = doc.head();
+		 //Add Css if exist
+		 if(publisherBeanImpl.getCss() != null){
+			List<String> csss = publisherBeanImpl.getCss();
+			for (String css : csss) {
+				head.append("<link rel='stylesheet' type='text/css' href='" + css + "'>");
+			}
+		 }
+		 
+		 //Add javascript
+		 if(publisherBeanImpl.getJs() != null){
+			List<String> jss = publisherBeanImpl.getJs();
+			for (String js : jss) {
+				head.append("<script type='text/javascript' src='" + js + "'></script>");
+			}
+		 }
+
 
 		/**
 		 * add tag's information to target HTML
 		 */
 
-		//
+		//Add Image title 
 		if(publisherBeanImpl.getTitleImg() != null){
 			Element title = HTMLUtils.id(doc, "publisher.title");
 			title.attr("src", String.format("titles/%s", publisherBeanImpl.getTitleImg()));
 		}
 		
 
-		if(publisherBeanImpl.getDate() != null){
+		//Add date and author
+		if(publisherBeanImpl.getDate() != null || publisherBeanImpl.getAuthor() != null){
 			Element authorDate = HTMLUtils.id(doc, "publisher.author.date");
 			authorDate.text(String.format("%s - %s", publisherBeanImpl.getAuthor(), publisherBeanImpl.getDate()));
 		}	
 
-
+		File mdFile = null;
 		//Load the file content in String
-		File mdFile = new File(publisherBeanImpl.getMarkdown());
+		if(publisherBeanImpl.getMarkdown() != null){
+			mdFile = new File(publisherBeanImpl.getMarkdown());
+		} else {
+            ClassLoader classLoader = getClass().getClassLoader();
+            mdFile = new File(classLoader.getResource(input).getFile());
+		}
+		
 		//Convert the Markdown string into HTML string
 		String html = Md2Html.convert(FileUtils.getStrContent(mdFile));		
 		//Add html content (from markdown conversion)
 		Element content = HTMLUtils.id(doc, "publisher.content");
 		content.html(html);
 
-
-		//Add attribute data-aos="fade-up" to <section>
-
-		Elements sections = HTMLUtils.selectAny(doc, "section");
-		for(Element section : sections) {
-			section.attr("data-aos", "fade-up");
-		}
-
-
-		/**
-		 * Add code customization
-		 */
-		Elements codes = HTMLUtils.selectAny(doc, "code[class]");
-		int count = 1;
-		for(Element code : codes){
-			code.before("<i class=\"bi bi-clipboard ab-xlarge ab-clip-pos\" onclick=\"copyCode(event,'"+ count +"')\"></i>");
-
-			code.id(String.valueOf(count));
-
-			count++;
-		}
-
- 
-		/**
-		 * Add class to table
-		 */
-		Elements tables = HTMLUtils.selectAny(doc, "table");
-		for(Element table : tables){
-			table.attr("class", "ab-table-all ab-hoverable");
-		}
 
 
 		PublicationHtml htmlPub = new PublicationHtml();
@@ -180,7 +190,7 @@ public class PublisherDefaultHtml implements Publisher {
 
 
 	public static void main(String[] args){
-
+		//TODO Write a proper method
 		PublisherAngrybee pDefault = new PublisherAngrybee();
 		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
 

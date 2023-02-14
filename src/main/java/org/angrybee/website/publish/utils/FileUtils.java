@@ -51,7 +51,7 @@ public class FileUtils {
     static final Logger logger = Logger.getLogger(FileUtils.class.getName());
 
 	/**
-	 * List of strings
+	 * List of of files
 	 */
 	List<String> listFiles;
 	

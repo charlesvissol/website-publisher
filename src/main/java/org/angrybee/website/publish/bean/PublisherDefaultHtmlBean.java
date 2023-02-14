@@ -18,7 +18,9 @@ package org.angrybee.website.publish.bean;
 import java.util.List;
 
 /**
- * Default Bean for the Markdown to HTML conversion.
+ * Default Bean for the Markdown to HTML conversion. 
+ * This class is a generic conversion without any customization except those corresponding to de CSS and Javascript added by the user.
+ * 
  * @author Charles Vissol
  */
 public class PublisherDefaultHtmlBean implements PublisherBean {
@@ -38,23 +40,23 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
 
 
     /**
-     * Description to add the <meta> tag with attribute name="description" in HTML <header>
+     * Description to add the {@code <meta>} tag with attribute name="description" in HTML {@code <header>}
      */
     private String metaDescription = null;
 
     /**
-     * List of keywords to add the <meta> tag with attribute name="keywords" in HTML <header>
+     * List of keywords to add the {@code <meta>} tag with attribute name="keywords" in HTML {@code <header>}
      */
     private String metaKeywords = null;
 
     /**
-     * Author to add to the <meta> tag with attribute name="author" in HTML <header>
+     * Author to add to the {@code <meta>} tag with attribute name="author" in HTML {@code <header>}
      */
     private String metaAuthor = null;
 
 
     /**
-     * Icon to add to HTML <header> in <Link> tag
+     * Icon to add to HTML header in {@code <Link>} tag
      */
     private String metaIcon = null;
 
@@ -74,7 +76,7 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
     private String titleImg = null;
 
     /**
-     * Text to add to <title> tag
+     * Text to add to {@code <title>} tag
      */
     private String titleTxt = null;
 

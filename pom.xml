@@ -122,6 +122,18 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
 		<version>3.4.1</version>
+
+		<configuration>
+			<additionalOptions>-html5 --allow-script-in-comments</additionalOptions>
+			<nohelp>true</nohelp>
+			<show>private</show>
+			<header><![CDATA[
+				<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs.min.css">
+				<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+				<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+			]]></header><!--Add Syntax highlight to Java code inside javadoc -->
+		</configuration>
+
 		<reportSets>
 			<reportSet>
 				<reports>
