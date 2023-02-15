@@ -25,7 +25,13 @@ import org.jsoup.nodes.Document;
 public class PublicationHtml implements Publication {
     
     /**
-     * Jsoup Document object
+     * Default constructor
+     */
+    public PublicationHtml(){
+        /* Default constructor */
+    }
+    /**
+     * Jsoup Document object = Abstract instance of the HTML document using Jsoup library
      */
     private Document doc;
 

@@ -16,11 +16,11 @@ limitations under the License.
 package org.angrybee.website.publish.impl;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.angrybee.website.publish.Publication;
 import org.angrybee.website.publish.Publisher;
 import org.angrybee.website.publish.bean.PublisherBean;
@@ -56,6 +56,12 @@ public class PublisherDefaultHtml implements Publisher {
 	 */
 	private PublisherDefaultHtmlBean publisherBeanImpl;
 
+	/**
+	 * Default constructor
+	 */
+	public PublisherDefaultHtml(){
+		/* Default constructor */
+	}
 
 	@Override
 	public void getBean(PublisherBean publisherBeanImpl) {
@@ -79,8 +85,11 @@ public class PublisherDefaultHtml implements Publisher {
 
 		//Load template HTML file: default template if not in the Bean
         if(publisherBeanImpl.getTemplate() != null){
-            ClassLoader classLoader = getClass().getClassLoader();
-            fileTemplate = new File(classLoader.getResource(template).getFile());
+			try {
+				fileTemplate = new FileUtils().getFileFromResource(template);
+			} catch (URISyntaxException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}
         } else {
             fileTemplate = new File(publisherBeanImpl.getTemplate());
         }
@@ -167,8 +176,11 @@ public class PublisherDefaultHtml implements Publisher {
 		if(publisherBeanImpl.getMarkdown() != null){
 			mdFile = new File(publisherBeanImpl.getMarkdown());
 		} else {
-            ClassLoader classLoader = getClass().getClassLoader();
-            mdFile = new File(classLoader.getResource(input).getFile());
+			try {
+				mdFile = new FileUtils().getFileFromResource(input);
+			} catch (URISyntaxException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}
 		}
 		
 		//Convert the Markdown string into HTML string
@@ -185,28 +197,6 @@ public class PublisherDefaultHtml implements Publisher {
 
 		return htmlPub;
 
-
-	}
-
-
-	public static void main(String[] args){
-		//TODO Write a proper method
-		PublisherAngrybee pDefault = new PublisherAngrybee();
-		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
-
-		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/@Linux_1_intro_terminal.md");
-		pDefaultBean.setAuthor("Charles Vissol");
-		pDefaultBean.setDate("February 11, 2023");
-		pDefaultBean.setTitleImg("Linux_1_intro_terminal.png");
-		pDefaultBean.setMetaDescription("Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal");
-		pDefaultBean.setMetaKeywords("Linux terminal shortcut command basics introduction");
-		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
-		pDefaultBean.setTitleTxt("Linux Basics: Terminal survivor kit");
-
-		pDefault.getBean(pDefaultBean);
-		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
-
-		logger.log(Level.INFO, htmlPub.getDocument().html());
 
 	}
 

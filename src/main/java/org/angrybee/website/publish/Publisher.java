@@ -19,6 +19,7 @@ import org.angrybee.website.publish.bean.PublisherBean;
 
 /**
  * Interface that represents the main process of publication
+ * 
  * @author Charles Vissol
  */
 public interface Publisher {

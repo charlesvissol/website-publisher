@@ -28,9 +28,7 @@ import java.io.Writer;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -46,16 +44,17 @@ import java.util.logging.Logger;
  */
 public class FileUtils {
 
+    /**
+     * Default constructor
+     */
+    public FileUtils(){
+        /*Default constructor */
+    }
 
-
+    /**
+     * Logger for FileUtils
+     */
     static final Logger logger = Logger.getLogger(FileUtils.class.getName());
-
-	/**
-	 * List of of files
-	 */
-	List<String> listFiles;
-	
-	
 
 	
 	/**
@@ -107,39 +106,14 @@ public class FileUtils {
 
 
     
-    /**
-     * Write a file from a direct stream content
-     * 
-     * @param sourceFile ImputStream of source file
-     * @param pathFile File path to create.
-     * @throws IOException
-     */
-    public static void writeFromStream(InputStream sourceFile, String pathFile) throws IOException{
-    	
-        
-    	try (FileOutputStream lFos = new FileOutputStream(pathFile)) {
-    	
-	        
-	        byte[] buff = new byte[1024];
-	        int cnt = -1;
 
-	        while ((cnt = sourceFile.read(buff)) != -1) {
-	            lFos.write(buff, 0, cnt);
-	        }            throw new IllegalArgumentException(String.format("File not found! %s ", pathFile));
-
-
-            
-    	} catch(IOException e) {
-    		logger.log(Level.SEVERE, e.getMessage(), e);
-    	}
-    }
     
     /**
      * Write a text file directly from String content
      * 
      * @param file Full path of the file to write
      * @param fileContent String content to write in the file
-     * @throws IOException
+     * @throws IOException Exception in case of output file problems (impossible to write)
      */
     public static void writeFromString(String file, String fileContent) throws IOException
     {
@@ -157,60 +131,13 @@ public class FileUtils {
     
     } 
     
-    /**
-     * Get recursive paths of files inside a directory
-     * @param file Fichier de base pour le parcours.
-     * @param isPath <b>true</b> if return the full path of files, <b>false</b> if return only the name of file
-     */
-    private void list(File file, boolean isPath)
-    {
-    	
-        if (file.isDirectory()) 
-        {
-            File[] childs = file.listFiles();
-            for (int i = 0; i < childs.length; i++)
-            {
-            	if(isPath)
-            		list(childs[i], true);//Full path
-            	else
-            		list(childs[i], false);//only names
-            }
-        }
-        if(isPath)
-        	listFiles.add(file.getAbsolutePath());//Full path
-        else
-        	listFiles.add(file.getName());//Only names
-    }
-    
-    /**
-     * return a list of files names (format: $file.getName()) recursively obtained by 
-     * analysis a root directory
-     * @param file Root directory
-     * @return List of String representing $file.getName()
-     */
-    public List<String> getFilesName(File file){
-    	listFiles = new ArrayList<>();
-    	list(file, false);
-    	
-    	return listFiles;
-    }
-    
-    /**
-     * return a list of files names (format: $file.getAbsolutePath()) recursively obtained by 
-     * analysis a root directory
-     * @param file Root directory
-     * @return List of String representing $file.getAbsolutePath()
-     */
-    public List<String> getPath(File file){
-    	listFiles = new ArrayList<>();
-    	list(file, true);
-    	
-    	return listFiles;
-    }
-    
 
-    // get a file from the resources folder
-    // works everywhere, IDEA, unit test and JAR file.
+    /** 
+    * get a file from the resources folder
+    * works everywhere, IDEA, unit test and JAR file.
+    * @param fileName Filename to load from a resource (JAR file in general)
+    * @return Stream content of the file
+    */
     public InputStream getFileFromResourceAsStream(String fileName) {
 
         // The class loader that loaded the class
@@ -226,13 +153,17 @@ public class FileUtils {
 
     }
 
-    /*
-        The resource URL is not working in the JAR
-        If we try to access a file that is inside a JAR,
-        It throws NoSuchFileException (linux), InvalidPathException (Windows)
-
-        Resource URL Sample: file:java-io.jar!/json/file1.json
-     */
+    /**
+    * The resource URL is not working in the JAR
+    * If we try to access a file that is inside a JAR,
+    * It throws <code>NoSuchFileException</code> (linux), <code>InvalidPathException</code> (Windows)
+    *
+    * Resource URL Sample: file:java-io.jar!/json/file1.json
+    * @param fileName Path of the file
+    * @throws URISyntaxException Exception if URI is malformed
+    * @return File resource inside a JAR
+    * 
+    */
     public File getFileFromResource(String fileName) throws URISyntaxException{
 
         ClassLoader classLoader = getClass().getClassLoader();
@@ -261,25 +192,5 @@ public class FileUtils {
            logger.info(e.getMessage());
         }
     }
-
-
-    /**
-     * Delete recursively files and directory
-     * @param directory Base directory to clean
-     */
-    public static boolean delDir(File directory) throws NoSuchFileException, DirectoryNotEmptyException, IOException {
-        //TODO move from File to Files (java.nio.file.Files#delete)
-        if (directory.isDirectory()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    delDir(file);
-                }
-            }
-        }
-
-        return directory.delete();
-    }
-
 
 }

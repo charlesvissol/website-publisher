@@ -37,11 +37,15 @@ import java.util.logging.Logger;
  * Dedicated utility class to convert markdown into HTML
  * Source code downloaded from 
  * @see <a href="https://simplesolution.dev/java-convert-markdown-to-html-using-flexmark-java">https://simplesolution.dev/java-convert-markdown-to-html-using-flexmark-java</a>.
+ * 
  * @author Charles Vissol
  *
  */
 public final class Md2Html {
-	
+
+    /**
+     * Logger for Md2Html
+     */
 	static final Logger logger = Logger.getLogger(Md2Html.class.getName());
 
     /**

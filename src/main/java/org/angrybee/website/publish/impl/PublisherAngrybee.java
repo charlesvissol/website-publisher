@@ -17,6 +17,7 @@ package org.angrybee.website.publish.impl;
 
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +46,7 @@ import org.jsoup.select.Elements;
  * 
  * <p><img alt="PublisherAngrybee principles" src="doc-files/PublisherAngrybee.png"/></p>
  * 
- * <p>Example of usage:</p>
+ * <p>Example of usage without Json:</p>
  * <pre><code>
  * 	public static void main(String[] args){
  *
@@ -84,8 +85,17 @@ public class PublisherAngrybee implements Publisher {
 	 */
 	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherAngrybee.class.getName());
 
+	/**
+	 * Bean to load all the necessary parameters to convert Markdown to HTML
+	 */
 	private PublisherDefaultHtmlBean publisherBeanImpl;
 
+	/**
+	 * Default constructor
+	 */
+	public PublisherAngrybee(){
+		/* Default constructor */
+	}
 
 	@Override
 	public void getBean(PublisherBean publisherBeanImpl) {
@@ -103,8 +113,12 @@ public class PublisherAngrybee implements Publisher {
 		String template = resources.getString("template");
 
 		//Load template HTML file
-		ClassLoader classLoader = getClass().getClassLoader();
-		File fileTemplate = new File(classLoader.getResource(template).getFile());
+		File fileTemplate = null;
+		try {
+			fileTemplate = new FileUtils().getFileFromResource(template);
+		} catch (URISyntaxException e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
 
 		//Parse the new File (copy of the HTML template)
 		Document doc = HTMLUtils.doc(fileTemplate);
@@ -132,7 +146,7 @@ public class PublisherAngrybee implements Publisher {
 
 		 //Add author to <meta name="author" content="vissol">
 		 if(publisherBeanImpl.getMetaAuthor() != null){
-			Element metaAuthor = HTMLUtils.selectOne(doc, "meta[name=keywords]");
+			Element metaAuthor = HTMLUtils.selectOne(doc, "meta[name=author]");
 			metaAuthor.attr(CONTENT, publisherBeanImpl.getMetaAuthor());
 		 }
 
@@ -240,7 +254,9 @@ public class PublisherAngrybee implements Publisher {
 		pDefault.getBean(pDefaultBean);
 		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
 
-		logger.log(Level.INFO, htmlPub.getDocument().html());
+		String htmlContent = htmlPub.getDocument().html();
+
+		logger.log(Level.INFO, () -> "HTML result of PublisherAngrybee:\n"+ htmlContent);
 
 	}
 

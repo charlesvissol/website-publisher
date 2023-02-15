@@ -149,6 +149,12 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-project-info-reports-plugin</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.cyclonedx</groupId>
 			<artifactId>cyclonedx-maven-plugin</artifactId>
 			<version>2.7.4</version>

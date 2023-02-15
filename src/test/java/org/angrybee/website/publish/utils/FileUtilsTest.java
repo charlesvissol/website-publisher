@@ -1,7 +1,6 @@
 package org.angrybee.website.publish.utils;
 
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.io.IOException;
@@ -13,52 +12,6 @@ public class FileUtilsTest {
 
     static final Logger logger = Logger.getLogger(FileUtilsTest.class.getName());
 
-
-
-    /**
-     * Test of FileUtils.delDir() method based on the 
-     * existence of the directory deleted
-     */
-    @Test
-    void testDelDir() {
-
-		String tempDir = System.getProperty("java.io.tmpdir");
-
-		File f = new File(tempDir + File.separator + "fileutils" + File.separator + "fileutils");        
-        f.mkdirs();
-        File f2 = new File(tempDir + File.separator + "fileutils" + File.separator + "test.txt");
-
-        logger.info(f.getPath());
-        logger.info(f2.getPath());
-
-
-        try {
-            f2.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-		File f3 = new File(tempDir + File.separator + "fileutils" + File.separator + "fileutils" + File.separator + "test.txt");        
-
-        logger.info(f3.getPath());
-
-
-        try {
-            f3.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            FileUtils.delDir(new File(tempDir + File.separator + "fileutils"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        //Test if the directory has been deleted recursively
-        assertFalse(new File(tempDir + File.separator + "fileutils").exists());
-
-    }
 
     /**
      * Test of FileUtils.getStrContent() method based on hashcode

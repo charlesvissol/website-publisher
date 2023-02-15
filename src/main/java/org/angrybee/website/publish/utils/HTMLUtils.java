@@ -32,6 +32,9 @@ import org.jsoup.select.Elements;
 public class HTMLUtils {
     
 
+    /**
+     * Logger for HTMLUtils
+     */
     static final Logger logger = Logger.getLogger(HTMLUtils.class.getName());
 
     /**

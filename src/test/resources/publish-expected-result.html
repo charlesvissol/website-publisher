@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <meta name="description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal"> 
+  <meta name="keywords" content="Linux terminal shortcut command basics introduction"> 
+  <meta name="author" content="Charles Vissol"> <!-- Add SEO and social media marketing capabilities to your page (https://ogp.me/)--> 
+  <meta property="og:title" content="Linux Basics: Terminal survivor kit"> 
+  <meta property="og:type" content="article"> 
+  <meta property="og:url" content="https://angrybee.tech"> 
+  <meta property="og:description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal"> 
+  <link rel="shortcut icon" href="../pictures/angrybee-blue.svg"> 
+  <title>Linux Basics: Terminal survivor kit</title> <!-- Responsive viewport meta tag --> 
+  <style>
+
+
+@media only screen and (max-width: 768px) {
+
+    img {
+        width: 100%;
+    }
+}
+
+.is-active-link::before {
+    background-color: var(--blue);
+}
+
+
+.ab-animate-right-slow-framework{
+	position:relative;
+	animation:animaterightslowframework 1.5s;
+	transition-timing-function: ease-out;
+}
+@keyframes animaterightslowframework{
+	from{right:-300px;} 
+	to{right:-110px;}
+}
+
+
+		.magictime {
+			-webkit-animation-duration: 2s;
+			animation-duration: 2s;
+		}
+
+
+		.ab-btn:hover > .bi {
+			color: var(--red-xxxxlight);
+			
+		}
+
+		@media (max-width: 992px){
+			.bg-angrybee-img {
+				display: none;
+			}
+		}
+		@media (min-width: 993px){
+			.bg-angrybee-img {
+				display: block;
+			}
+		}
+
+
+
+		/* Redefine the background of the code snippets */
+		.hljs {
+			color: #c9d1d9;
+			background: hsl(216, 50%, 08%);
+		}
+
+
+	</style> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw==" crossorigin="anonymous" referrerpolicy="no-referrer"> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/5.0.0/anchor.min.js" integrity="sha512-byAcNWVEzFfu+tZItctr+WIMUJvpzT2kokkqcBq+VsrM3OrC5Aj9E2gh+hHpU0XNA3wDmX4sDbV5/nkhvTrj4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> <!--Boostrap bundled with Popper--> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" integrity="sha512-YFENbnqHbCRmJt5d+9lHimyEMt8LKSNTMLSaHjvsclnZGICeY/0KYEeiHwD1Ux4Tcao0h60tdcMv+0GljvWyHg==" crossorigin="anonymous" referrerpolicy="no-referrer"> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js" integrity="sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w==" crossorigin="anonymous" referrerpolicy="no-referrer"> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PreloadJS/1.0.1/preloadjs.min.js" integrity="sha512-fEAYokehnF/e5P+Whrp7YAWBQGqQtimX1DrFBu21J+4WI2wCM/z+kTHiRMCcfYUqHbCcCADC9QivGn7Q75IQig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/kute.js/2.2.4/kute.min.js" integrity="sha512-ExzTv2b9+LEDBzzlAfT4rSa2C6ncivquUGYGWCPS4yIPjhg+eVi5cSi5NLGZZfK8p/xA4OqAohgfmJT8uWKgpw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.5.1/snap.svg-min.js" integrity="sha512-Gk+uNk8NWN235mIkS6B7/424TsDuPDaoAsUekJCKTWLKP6wlaPv+PBGfO7dbvZeibVPGW+mYidz0vL0XaWwz4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vivus/0.4.6/vivus.min.js" integrity="sha512-oUUeA7VTcWBqUJD/VYCBB4VeIE0g1pg5aRMiSUOMGnNNeCLRS39OlkcyyeJ0hYx2h3zxmIWhyKiUXKkfZ5Wryg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.20.0/tocbot.min.js" integrity="sha512-aeQPIoprk35kvJYUFH4nhvm+ASgaUHHBfJQLEfizXatcdcrWFIzNNpG/lf70ePbB1cplRQ2I5/XyMLMZJHFRzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magic/1.1.0/magic.min.css" referrerpolicy="no-referrer"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/hover.css/2.3.1/css/hover-min.css" integrity="sha512-csw0Ma4oXCAgd/d4nTcpoEoz4nYvvnk21a8VA2h2dzhPAvjbUIK6V3si7/g/HehwdunqqW18RwCJKpD7rL67Xg==" crossorigin="anonymous" referrerpolicy="no-referrer"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.20.0/tocbot.css" integrity="sha512-MiKzJ1SHUjeQpWOIKdj1LYmEdnPF076Zeq7en/98oFIfomw5MEbqJ2RhRl+4WHo1ciJyFjFigtgKzXOO50Psrg==" crossorigin="anonymous" referrerpolicy="no-referrer"> 
+  <script src="../angrybee.js"></script> 
+  <link rel="stylesheet" href="../angrybee-dark.css"> 
+  <link rel="stylesheet" href="./angrybee-symbols.css"> 
+  <script>
+	
+        
+        
+        //Enable syntax highlight
+		hljs.highlightAll();
+
+
+
+
+        //Toc navigation
+        function nav_to_content(event){
+            var pageToc = document.getElementsByClassName("ab-toc");
+
+            for (i = 0; i < pageToc.length; i++) {
+                pageToc[i].style.fontWeight = "normal";
+            }
+            
+            event.currentTarget.style.fontWeight='bold'
+        }
+
+
+        // Script to open and close sidebar
+        function side_open() {
+            document.getElementById("main_sidebar").classList.add("ab-show");
+            
+
+            document.getElementById("main_overlay").style.display = "block";
+
+
+
+            document.getElementById("menu_for_sidebar").classList.remove("ab-hide-large");
+            document.getElementById("menu_for_sidebar").classList.add("ab-hide");
+            //document.getElementById("menu_for_sidebar").style.display = "none"
+        }
+        
+        function side_close() {
+            document.getElementById("main_sidebar").classList.remove("ab-show");
+            document.getElementById("main_sidebar").classList.add("ab-hide");
+
+            document.getElementById("main_overlay").style.display = "none";
+
+
+
+            document.getElementById("menu_for_sidebar").classList.add("ab-hide-large");
+            document.getElementById("menu_for_sidebar").classList.remove("ab-hide");       
+
+        }
+
+	</script> 
+ </head> 
+ <body class="ab-dark-light"> <span id="menu_for_sidebar" onclick="side_open()" class=" ab-float-left ab-white-font ab-xxlarge" title="Open menu" style="position: fixed;top: 0px;left: 5px;cursor:pointer;z-index:999"> ☰ </span> 
+  <nav class="ab-dark-light ab-sidebar ab-animate-left-slow" id="main_sidebar"> <span onclick="side_close()" class="ab-show-medium ab-float-right ab-white-font ab-xlarge ab-margin-right-10 ab-margin-top-10" style="cursor: pointer;" title="Close menu"> ✕ </span> 
+   <img src="../pictures/website-angrybee-global-title.svg" alt="Angrybee" onclick="location.href = '../articles.html';" class="magictime perspectiveUpReturn ab-margin-5" style="cursor:pointer;width:190px;position:fixed;top:0px;z-index:997;"> 
+   <div class="ab-width-100per ab-margin-left-10 ab-margin-top-32" style="overflow:hidden;scrollbar-color:hsl(207, 90%, 55%) hsl(216,50%,12%);top:50px;position:absolute;"> 
+    <div> 
+     <div class="js-toc" style="overflow-x:hidden;scrollbar-color:hsl(207, 90%, 55%) hsl(216,50%,12%);"></div> 
+    </div> 
+   </div> 
+  </nav> <!-- Overlay effect when opening sidebar on small screens --> 
+  <div class="ab-overlay ab-animate-fadIn ab-hide-medium" onclick="side_close()" style="cursor:pointer;display: none;" title="close side menu" id="main_overlay"></div> 
+  <div id="main_content" class="ab-main js-toc-content"> <a id="top-page"></a> <!-- Introduction --> 
+   <article id="template" class="ab-animate-fadIn-4 ab-animate-right-slow post-content"> <!-- Title of the article--> 
+    <img data-align="center" alt="" id="publisher.title" class="article-title" title="" src="titles/Linux_1_intro_terminal.png"> <!-- Author and date of publication--> 
+    <p id="publisher.author.date">Charles Vissol - February 13, 2023</p> <!-- Content of the article injected from Markdown content transformation --> 
+    <div id="publisher.content">
+     <section data-aos="fade-up"> 
+      <br> 
+      <p>It is important to know some basic commands to use properly the terminal and to be comfortable.</p> 
+      <p><strong>You can access to the terminal using <code>Ctrl + Alt + T</code></strong></p> 
+      <h1>Shell utilities</h1> 
+      <p>The <code>Shell</code> acts as an interface between the user and the <code>Kernel</code>. Shell is an intermediate program that accepts the commands, typed at the terminal and executes them to obtain kernel understandable command set.</p> 
+      <ul> 
+       <li> <p>Programming language constructs: shell provides powerful constructs using which exiting commands can be used to frame the job sequances or develop new utilities</p> </li> 
+       <li> <p>Shell script: Shell commands and constructs are stored in a file, which can later be used to execute these commands like a program. This file is generally called shell script.</p> </li> 
+       <li> <p>Shell vaiables: Like other programming language one can define variable in shell program also. These variables are identified by prefixing their names with <code>$</code> sign.</p> </li> 
+      </ul> 
+      <h1>Terminal shortcuts</h1> 
+      <p>Here is a summary of all the main commands to start with Linux Terminal</p> 
+      <h2>Move</h2> 
+      <table class="ab-table-all ab-hoverable"> 
+       <thead> 
+        <tr>
+         <th><em>Move</em></th>
+         <th><em>In a Line</em></th>
+        </tr> 
+       </thead> 
+       <tbody> 
+        <tr>
+         <td><code>Ctrl</code> + <code>&gt;</code></td>
+         <td>Move Cursor forward a word</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>&lt;</code></td>
+         <td>Move Cursor backward a word</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>a</code></td>
+         <td>Move Cursor to start line</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>e</code></td>
+         <td>Move Cursor to end line</td>
+        </tr> 
+        <tr>
+         <td><em><strong>Move</strong></em></td>
+         <td><em><strong>in a Terminal</strong></em></td>
+        </tr> 
+        <tr>
+         <td><code>Shift</code> + <code>Up</code></td>
+         <td>Move to line Up<br></td>
+        </tr> 
+        <tr>
+         <td><code>Shift</code> + <code>Page Up</code></td>
+         <td>Move to page Up</td>
+        </tr> 
+        <tr>
+         <td><code>Shift</code> + <code>Down</code></td>
+         <td>Move to line Down</td>
+        </tr> 
+        <tr>
+         <td><code>Shift</code> + <code>Page Down</code></td>
+         <td>Move to page Down</td>
+        </tr> 
+       </tbody> 
+      </table> 
+     </section> 
+     <br> 
+     <section data-aos="fade-up"> 
+      <br> 
+      <h2>Cut, Copy &amp; Paste</h2> 
+      <table class="ab-table-all ab-hoverable"> 
+       <thead> 
+        <tr>
+         <th><em>Cut/Copy/Paste</em></th>
+         <th>-</th>
+        </tr> 
+       </thead> 
+       <tbody> 
+        <tr>
+         <td><code>Ctrl</code> + <code>k</code></td>
+         <td>Cut everything after Cursor</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>u</code></td>
+         <td>Cut everything before Cursor</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>shift</code> + <code>c</code>/<code>v</code></td>
+         <td>Copy/Paste into terminal</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>y</code></td>
+         <td>Paste from buffer</td>
+        </tr> 
+       </tbody> 
+      </table> 
+     </section> 
+     <br> 
+     <section data-aos="fade-up"> 
+      <h2>Clear</h2> 
+      <table class="ab-table-all ab-hoverable"> 
+       <thead> 
+        <tr>
+         <th><em>Clear</em></th>
+         <th>-</th>
+        </tr> 
+       </thead> 
+       <tbody> 
+        <tr>
+         <td><code>Ctrl</code> + <code>l</code></td>
+         <td>Clear screen</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>w</code></td>
+         <td>Clear last word</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>u</code></td>
+         <td>Clear last line</td>
+        </tr> 
+       </tbody> 
+      </table> 
+     </section> 
+     <br> 
+     <section data-aos="fade-up"> 
+      <h2>Search</h2> 
+      <table class="ab-table-all ab-hoverable"> 
+       <thead> 
+        <tr>
+         <th><em>Search</em></th>
+         <th>-</th>
+        </tr> 
+       </thead> 
+       <tbody> 
+        <tr>
+         <td><code>Ctrl</code> + <code>r</code></td>
+         <td>Search in command history<br> <code>Ctrl</code> + <code>j</code> Or <code>Esc</code> Exit from search</td>
+        </tr> 
+       </tbody> 
+      </table> 
+     </section> 
+     <br> 
+     <section data-aos="fade-up"> 
+      <h2>Running Script</h2> 
+      <table class="ab-table-all ab-hoverable"> 
+       <thead> 
+        <tr>
+         <th><em>Running script</em></th>
+         <th>-</th>
+        </tr> 
+       </thead> 
+       <tbody> 
+        <tr>
+         <td><code>Ctrl</code> + <code>c</code></td>
+         <td>Stop running command Or script</td>
+        </tr> 
+        <tr>
+         <td><code>Ctrl</code> + <code>s</code></td>
+         <td>Pause a long running script<br><code>Ctrl</code> + <code>q</code>&nbsp;Resume Pause of a long running script</td>
+        </tr> 
+       </tbody> 
+      </table> 
+     </section> 
+    </div> 
+    <div data-aos="fade-up"> 
+     <p></p>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br> 
+    </div> 
+   </article> 
+  </div> <button class="ab-btn-dark-xlight ab-pos-bottomright-fix ab-margin-bottom-64 ab-show-medium ab-show-large" onclick="location.href = '#top-page';" style="z-index: 999;margin-right:5px!important"><i class="bi bi-arrow-up ab-large ab-white-font"></i></button> <button class="ab-btn-dark-xlight ab-pos-bottomright-fix ab-margin-16 ab-show-medium ab-show-large" onclick="location.href = '#bottom-page';" style="z-index: 999;margin-right:5px!important"><i class="bi bi-arrow-down ab-large ab-white-font"></i></button> <a id="bottom-page"></a> 
+  <script>
+
+
+		//AnchorJS initialisation
+		anchors.add('h1, h2, h3');
+
+
+		//Tooltip initialisation everywhere with bootstrap
+		var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+		var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+			return new bootstrap.Tooltip(tooltipTriggerEl)
+		})
+
+
+
+		AOS.init();		
+
+
+        tocbot.init({
+        tocSelector: '.js-toc',
+        contentSelector: '.js-toc-content',
+        isCollapsedClass: 'is-collapsed',
+        collapseDepth: 0,
+        scrollSmooth: true,
+        scrollSmoothDuration: 420,
+        orderedList: false,
+        activeLinkClass: 'is-active-link',
+        headingSelector: 'h1, h2, h3, h4',
+        hasInnerContainers: true,
+        });
+
+
+
+	</script>  
+ </body>
+</html>

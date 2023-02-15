@@ -15,6 +15,11 @@ limitations under the License.
 
 package org.angrybee.website.publish;
 
+/**
+ * Abstract representation of any Publication produced by the library
+ * 
+ * @author Charles Vissol
+ */
 public interface Publication {
     
 }
