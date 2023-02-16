@@ -20,5 +20,6 @@
     "files.watcherExclude": {
         "**/.git/**": true,
         "**/target/**": true
-      }
+    },
+    "java.compile.nullAnalysis.mode": "automatic"
 }
