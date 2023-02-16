@@ -18,9 +18,11 @@ package org.angrybee.website.publish.bean;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.angrybee.website.publish.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
 public class JsonTest {
@@ -49,7 +51,7 @@ public class JsonTest {
         assertTrue(bean.getAuthor().contentEquals("Charles Vissol"));
         assertTrue(bean.getDate().contentEquals("February 2, 2023"));
 
-
+        System.out.println(bean.toString());
     }
 
     @Test
@@ -78,6 +80,8 @@ public class JsonTest {
         bean.setDate("February 2, 2023");
 
         System.out.println("Write file to " + System.getProperty("java.io.tmpdir") + "/publisher.json");
+
+        System.out.println(FileUtils.getStrContent(new File(System.getProperty("java.io.tmpdir") + "/publisher.json")));
 
         Json.write(System.getProperty("java.io.tmpdir") + "/publisher.json", bean);
 

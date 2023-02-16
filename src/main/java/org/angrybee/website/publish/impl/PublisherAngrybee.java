@@ -48,28 +48,57 @@ import org.jsoup.select.Elements;
  * 
  * <p>Example of usage without Json:</p>
  * <pre><code>
- * 	public static void main(String[] args){
+ * 	
  *
  *		PublisherAngrybee pDefault = new PublisherAngrybee();
- *		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
+ *		PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
  *
- *		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Linux_boot_usb.md");
- *		pDefaultBean.setAuthor("Charles Vissol");
- *		pDefaultBean.setDate("February 13, 2023");
- *		pDefaultBean.setTitleImg("Linux_boot_usb.png");
- *		pDefaultBean.setMetaDescription("Pratical Linux tips to create a bootable USB stick from an ISO file");
- *		pDefaultBean.setMetaKeywords("Linux dd fdisk usb iso boot bootable stick /dev umount");
- *		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
- *		pDefaultBean.setTitleTxt("Linux tips, from iso to bootable usb");
+ *		List<String> css = new ArrayList<>();
+ *      css.add("first.css");
+ *      css.add("second.css");
  *
- *		pDefault.getBean(pDefaultBean);
+ *      List<String> js = new ArrayList<>();
+ *      js.add("first.js");
+ *      js.add("second.js");
+ *
+ *      bean.setCss(css);
+ *      bean.setJs(js);
+ *      bean.setTemplate("/tmp/template.html");
+ *      bean.setMetaAuthor("Charles Vissol");
+ *      bean.setMetaDescription("Description of the article");
+ *      bean.setMetaKeywords("article angrybee for publishing");
+ *      bean.setMetaIcon("pictures/angrybee.svg");
+ *      bean.setMarkdown("/tmp/article.md");
+ *      bean.setTitleImg("pictures/title.svg");
+ *      bean.setTitleTxt("this is a title");
+ *      bean.setAuthor("Charles Vissol");
+ *      bean.setDate("February 2, 2023");
+ *
+ *		pDefault.getBean(bean);
  *		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
  *
- *		logger.log(Level.INFO, htmlPub.getDocument().html());
- *
- *	}
+ *	
  * </code>
  * </pre>
+ * 
+ * <p>Example with Json:</p>
+ * <pre>
+ * <code>
+ * 
+ *      PublisherAngrybee pDefault = new PublisherAngrybee();
+ *      PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
+ * 
+ *      String jsonPath = System.getProperty("java.io.tmpdir") + "/publisher.json";
+ *      bean = (PublisherDefaultHtmlBean) Json.read(jsonPath, bean);
+ * 
+ *      pDefault.getBean(bean);
+ *      PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
+ * 
+ * </code>
+ * </pre>
+ * 
+ * 
+ * 
  * 
  * @author Charles Vissol
  */
@@ -242,14 +271,14 @@ public class PublisherAngrybee implements Publisher {
 		PublisherAngrybee pDefault = new PublisherAngrybee();
 		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
 
-		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Linux_boot_usb.md");
+		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Oracle_licensing_policy.md");
 		pDefaultBean.setAuthor("Charles Vissol");
-		pDefaultBean.setDate("February 13, 2023");
-		pDefaultBean.setTitleImg("Linux_boot_usb.png");
-		pDefaultBean.setMetaDescription("Pratical Linux tips to create a bootable USB stick from an ISO file");
-		pDefaultBean.setMetaKeywords("Linux dd fdisk usb iso boot bootable stick /dev umount");
+		pDefaultBean.setDate("February 16, 2023");
+		pDefaultBean.setTitleImg("oracle_jdk_licensing.png");
+		pDefaultBean.setMetaDescription("Short article to understand de licensing policy of Oracle Java SE and alternatives");
+		pDefaultBean.setMetaKeywords("Java SE BCL OTN NFTC Oracle OpenJDK Adoptium Liberica");
 		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
-		pDefaultBean.setTitleTxt("Linux tips, from iso to bootable usb");
+		pDefaultBean.setTitleTxt("Oracle Licensing policy explained to users");
 
 		pDefault.getBean(pDefaultBean);
 		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
