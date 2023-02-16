@@ -84,7 +84,7 @@ public class PublisherAngrybee implements Publisher {
 	 * properties file initialization where we specify the HTML page
 	 */
 	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherAngrybee.class.getName());
-
+	
 	/**
 	 * Bean to load all the necessary parameters to convert Markdown to HTML
 	 */
