@@ -17,6 +17,7 @@ package org.angrybee.website.publish.impl;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -64,7 +65,7 @@ public class PublisherDefaultHtml implements Publisher {
 	}
 
 	@Override
-	public void getBean(PublisherBean publisherBeanImpl) {
+	public void setBean(PublisherBean publisherBeanImpl) {
 		this.publisherBeanImpl = (PublisherDefaultHtmlBean) publisherBeanImpl;
 		
 	}
@@ -75,23 +76,24 @@ public class PublisherDefaultHtml implements Publisher {
 	@Override
 	public Publication publish() {
 
-		//Get html template
-		String template = resources.getString("template");
-		//Get Makdown templae
-		String input = resources.getString("input");
-
         File fileTemplate = null;
-        
 
 		//Load template HTML file: default template if not in the Bean
         if(publisherBeanImpl.getTemplate() != null){
+
+			fileTemplate = new File(publisherBeanImpl.getTemplate());
+
+        } else {
+
+			//Get the default html template if the PublisherDefaultHtmlBean.getTemplate() is empty
+			String template = resources.getString("template");	
+
 			try {
 				fileTemplate = new FileUtils().getFileFromResource(template);
+
 			} catch (URISyntaxException e) {
 				logger.log(Level.SEVERE, e.getMessage(), e);
-			}
-        } else {
-            fileTemplate = new File(publisherBeanImpl.getTemplate());
+			}          
         }
 
 		//Parse the new File (copy of the HTML template)
@@ -107,7 +109,11 @@ public class PublisherDefaultHtml implements Publisher {
 		 if(publisherBeanImpl.getMetaDescription() != null){
 			Element metaDescripton = HTMLUtils.selectOne(doc, "meta[name=description]");
 			metaDescripton.attr(CONTENT, publisherBeanImpl.getMetaDescription());
+			//Add SEO and social media tag
+			Element metaDescripton2 = HTMLUtils.selectOne(doc, "meta[property=og:description]");
+			metaDescripton2.attr(CONTENT, publisherBeanImpl.getMetaDescription());
 		 }
+
 
 		 //Add keywords to <meta name="keywords" content="$keywords$">
 		 if(publisherBeanImpl.getMetaKeywords() != null){
@@ -117,7 +123,7 @@ public class PublisherDefaultHtml implements Publisher {
 
 		 //Add author to <meta name="author" content="vissol">
 		 if(publisherBeanImpl.getMetaAuthor() != null){
-			Element metaAuthor = HTMLUtils.selectOne(doc, "meta[name=keywords]");
+			Element metaAuthor = HTMLUtils.selectOne(doc, "meta[name=author]");
 			metaAuthor.attr(CONTENT, publisherBeanImpl.getMetaAuthor());
 		 }
 
@@ -129,9 +135,13 @@ public class PublisherDefaultHtml implements Publisher {
 
 		 //Add title to the <title> tag 
 		 if(publisherBeanImpl.getTitleTxt() != null){
-			Element metaIcon = HTMLUtils.selectOne(doc, "title");
-			metaIcon.text(publisherBeanImpl.getTitleTxt());
+			Element metaTitleTxt = HTMLUtils.selectOne(doc, "title");
+			metaTitleTxt.text(publisherBeanImpl.getTitleTxt());
+			//Add SEO and social media tag
+			Element metaTitleTxt2 = HTMLUtils.selectOne(doc, "meta[property=og:title]");
+			metaTitleTxt2.attr(CONTENT, publisherBeanImpl.getTitleTxt());
 		 }
+
 
 		 /**
 		  * Modify HTML header is necessary
@@ -162,6 +172,10 @@ public class PublisherDefaultHtml implements Publisher {
 		if(publisherBeanImpl.getTitleImg() != null){
 			Element title = HTMLUtils.id(doc, "publisher.title");
 			title.attr("src", String.format("titles/%s", publisherBeanImpl.getTitleImg()));
+		} else {
+			//If no title defined, remove the Element from the HTML document
+			Element title = HTMLUtils.id(doc, "publisher.title");
+			title.remove();
 		}
 		
 
@@ -169,6 +183,11 @@ public class PublisherDefaultHtml implements Publisher {
 		if(publisherBeanImpl.getDate() != null || publisherBeanImpl.getAuthor() != null){
 			Element authorDate = HTMLUtils.id(doc, "publisher.author.date");
 			authorDate.text(String.format("%s - %s", publisherBeanImpl.getAuthor(), publisherBeanImpl.getDate()));
+		} else {
+			if(publisherBeanImpl.getDate() == null && publisherBeanImpl.getAuthor() == null) {//No author nor date -> we delete Element
+				Element authorDate = HTMLUtils.id(doc, "publisher.author.date");
+				authorDate.remove();
+			}
 		}	
 
 		File mdFile = null;
@@ -176,11 +195,17 @@ public class PublisherDefaultHtml implements Publisher {
 		if(publisherBeanImpl.getMarkdown() != null){
 			mdFile = new File(publisherBeanImpl.getMarkdown());
 		} else {
+			//In case of no Markdown for input, we use default markdown to show error but not to block the process.
+			String input = resources.getString("input");	
+
 			try {
 				mdFile = new FileUtils().getFileFromResource(input);
+
 			} catch (URISyntaxException e) {
 				logger.log(Level.SEVERE, e.getMessage(), e);
-			}
+			}  			
+			
+			
 		}
 		
 		//Convert the Markdown string into HTML string
@@ -199,6 +224,41 @@ public class PublisherDefaultHtml implements Publisher {
 
 
 	}
+
+
+	public static void main(String[] args) {
+		PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
+        List<String> css = new ArrayList<>();
+        css.add("first.css");
+        css.add("second.css");
+
+        List<String> js = new ArrayList<>();
+        js.add("first.js");
+        js.add("second.js");
+
+        bean.setCss(css);
+        bean.setJs(js);
+        //bean.setTemplate("/tmp/template.html");
+        bean.setMetaAuthor("Charles Vissol");
+        bean.setMetaDescription("Description of the article");
+        bean.setMetaKeywords("article angrybee for publishing");
+        bean.setMetaIcon("pictures/angrybee.svg");
+        bean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Oracle_licensing_policy.md");
+        //bean.setTitleImg("pictures/title.svg");
+        bean.setTitleTxt("this is a title");
+        bean.setAuthor("Charles Vissol");
+        bean.setDate("February 2, 2023");
+
+		PublisherDefaultHtml htmlPublisher = new PublisherDefaultHtml();
+		htmlPublisher.setBean(bean);
+
+		PublicationHtml pub = (PublicationHtml) htmlPublisher.publish();
+
+		System.out.println(pub.getDocument().html());
+
+	}
+
+
 
 
 }
