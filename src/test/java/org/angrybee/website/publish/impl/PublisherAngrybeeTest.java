@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-
 package org.angrybee.website.publish.impl;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,11 +29,11 @@ import org.angrybee.website.publish.bean.PublisherDefaultHtmlBean;
 import org.angrybee.website.publish.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
-public class PublisherDefaultHtmlTest {
+public class PublisherAngrybeeTest {
     @Test
     void testPublish() {
 
-		PublisherDefaultHtml pDefault = new PublisherDefaultHtml();
+		PublisherAngrybee pDefault = new PublisherAngrybee();
 		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
 
 		try {
@@ -58,7 +57,7 @@ public class PublisherDefaultHtmlTest {
 
         File expected = null;
         try {
-            expected = new FileUtils().getFileFromResource("publish-expected-result2.html");
+            expected = new FileUtils().getFileFromResource("publish-expected-result.html");
         } catch (URISyntaxException e) {
             
             e.printStackTrace();
