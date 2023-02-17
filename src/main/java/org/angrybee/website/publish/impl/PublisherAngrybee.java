@@ -53,11 +53,11 @@ import org.jsoup.select.Elements;
  *		PublisherAngrybee pDefault = new PublisherAngrybee();
  *		PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
  *
- *		List<String> css = new ArrayList<>();
+ *		List&lt;String&gt; css = new ArrayList&lt;&gt;();}
  *      css.add("first.css");
  *      css.add("second.css");
  *
- *      List<String> js = new ArrayList<>();
+ *      List&lt;String&gt; js = new ArrayList&lt;&gt;();}
  *      js.add("first.js");
  *      js.add("second.js");
  *

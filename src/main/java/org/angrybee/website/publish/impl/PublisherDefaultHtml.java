@@ -225,40 +225,4 @@ public class PublisherDefaultHtml implements Publisher {
 
 	}
 
-
-	public static void main(String[] args) {
-		PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
-        List<String> css = new ArrayList<>();
-        css.add("first.css");
-        css.add("second.css");
-
-        List<String> js = new ArrayList<>();
-        js.add("first.js");
-        js.add("second.js");
-
-        bean.setCss(css);
-        bean.setJs(js);
-        //bean.setTemplate("/tmp/template.html");
-        bean.setMetaAuthor("Charles Vissol");
-        bean.setMetaDescription("Description of the article");
-        bean.setMetaKeywords("article angrybee for publishing");
-        bean.setMetaIcon("pictures/angrybee.svg");
-        bean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Oracle_licensing_policy.md");
-        //bean.setTitleImg("pictures/title.svg");
-        bean.setTitleTxt("this is a title");
-        bean.setAuthor("Charles Vissol");
-        bean.setDate("February 2, 2023");
-
-		PublisherDefaultHtml htmlPublisher = new PublisherDefaultHtml();
-		htmlPublisher.setBean(bean);
-
-		PublicationHtml pub = (PublicationHtml) htmlPublisher.publish();
-
-		System.out.println(pub.getDocument().html());
-
-	}
-
-
-
-
 }
