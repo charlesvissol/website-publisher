@@ -98,8 +98,6 @@ import org.jsoup.select.Elements;
  * </pre>
  * 
  * 
- * 
- * 
  * @author Charles Vissol
  */
 public class PublisherAngrybee implements Publisher {
@@ -127,7 +125,7 @@ public class PublisherAngrybee implements Publisher {
 	}
 
 	@Override
-	public void getBean(PublisherBean publisherBeanImpl) {
+	public void setBean(PublisherBean publisherBeanImpl) {
 		this.publisherBeanImpl = (PublisherDefaultHtmlBean) publisherBeanImpl;
 		
 	}
@@ -260,33 +258,5 @@ public class PublisherAngrybee implements Publisher {
 
 	}
 
-
-	/**
-	 * Main method to run Angrybee publication process.
-	 * The goal is convert Markdown articles to web pages for Angrybee Website
-	 * @param args No args
-	 */
-	public static void main(String[] args){
-
-		PublisherAngrybee pDefault = new PublisherAngrybee();
-		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
-
-		pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/Oracle_licensing_policy.md");
-		pDefaultBean.setAuthor("Charles Vissol");
-		pDefaultBean.setDate("February 16, 2023");
-		pDefaultBean.setTitleImg("oracle_jdk_licensing.png");
-		pDefaultBean.setMetaDescription("Short article to understand de licensing policy of Oracle Java SE and alternatives");
-		pDefaultBean.setMetaKeywords("Java SE BCL OTN NFTC Oracle OpenJDK Adoptium Liberica");
-		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
-		pDefaultBean.setTitleTxt("Oracle Licensing policy explained to users");
-
-		pDefault.getBean(pDefaultBean);
-		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
-
-		String htmlContent = htmlPub.getDocument().html();
-
-		logger.log(Level.INFO, () -> "HTML result of PublisherAngrybee:\n"+ htmlContent);
-
-	}
 
 }

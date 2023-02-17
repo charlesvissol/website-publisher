@@ -29,7 +29,7 @@ public interface Publisher {
      * on the Publishing process.
      * @param publisherBeanImpl {@link org.angrybee.website.publish.bean.PublisherBean} implementation
      */
-    public void getBean(PublisherBean publisherBeanImpl);
+    public void setBean(PublisherBean publisherBeanImpl);
 
     /**
      * Generic method to implement if you want to create your own chain of publishing

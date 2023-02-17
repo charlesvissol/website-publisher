@@ -50,7 +50,7 @@ public class PublisherDefaultHtmlTest {
 		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
 		pDefaultBean.setTitleTxt("Linux Basics: Terminal survivor kit");
 
-		pDefault.getBean(pDefaultBean);
+		pDefault.setBean(pDefaultBean);
 		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
 
 
