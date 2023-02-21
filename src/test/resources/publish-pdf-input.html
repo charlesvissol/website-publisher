@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="utf-8"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <link rel="shortcut icon" href="../pictures/angrybee-blue.svg"> 
+  <title>Linux Basics: Terminal survivor kit</title> 
+  <meta name="description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal"> 
+  <meta name="keywords" content="Linux terminal shortcut command basics introduction"> 
+  <meta name="author" content="Charles Vissol"> 
+  <meta property="og:title" content="Linux Basics: Terminal survivor kit"> 
+  <meta property="og:type" content="website"> <!--<meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">--> 
+  <meta property="og:description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal"> 
+  <meta property="og:image" content="image.png"> 
+  <style>
+    @page {
+      @top-right {
+          content: "Page " counter(page) " of " counter(pages);
+          font-family: sans-serif;
+          padding-right: 15px;
+      }
+    }
+
+    @page {
+      margin-left: 30mm;
+    }
+  
+    
+</style> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw==" crossorigin="anonymous" referrerpolicy="no-referrer"> 
+  <script>
+	
+    //Enable syntax highlight
+    hljs.highlightAll();
+
+</script> 
+ </head> 
+ <body> <!-- your content here...--> <!-- Title of the article-->  <!-- Author and date of publication--> 
+  <p id="publisher.author.date">Charles Vissol - February 13, 2023</p> 
+  <section id="publisher.content">
+   <h1>First title</h1> 
+   <p>A huge advantage that Unix and Linux operating systems have over Windows is that Unix and Linux do a much better job of keeping privileged administrative accounts separated from normal user accounts.<br> Indeed, one reason that older versions of Windows were so susceptible to security issues, such as drive-by virus infections, was the common practice of setting up user accounts with administrative privileges, without having the protection of the <strong>User Access Control</strong> (<strong>UAC</strong>) that’s in newer versions of Windows. (Even with UAC, Windows systems still do get infected, just not quite as often.) With Unix and Linux, it’s a lot harder to infect a properly configured system.</p> 
+   <pre><code class="language-bash">cat /boot/config-5.10.0-16-amd64 | grep CGROUP
+CONFIG_CGROUPS=y
+CONFIG_BLK_CGROUP=y
+CONFIG_CGROUP_WRITEBACK=y
+CONFIG_CGROUP_SCHED=y
+CONFIG_CGROUP_PIDS=y
+CONFIG_CGROUP_RDMA=y
+CONFIG_CGROUP_FREEZER=y
+CONFIG_CGROUP_HUGETLB=y
+CONFIG_CGROUP_DEVICE=y
+CONFIG_CGROUP_CPUACCT=y
+CONFIG_CGROUP_PERF=y
+CONFIG_CGROUP_BPF=y
+# CONFIG_CGROUP_DEBUG is not set
+CONFIG_SOCK_CGROUP_DATA=y
+CONFIG_BLK_CGROUP_RWSTAT=y
+# CONFIG_BLK_CGROUP_IOLATENCY is not set
+CONFIG_BLK_CGROUP_IOCOST=y
+# CONFIG_BFQ_CGROUP_DEBUG is not set
+CONFIG_NETFILTER_XT_MATCH_CGROUP=m
+CONFIG_NET_CLS_CGROUP=m
+CONFIG_CGROUP_NET_PRIO=y
+CONFIG_CGROUP_NET_CLASSID=y
+</code></pre> 
+   <p><img src="/home/vissol/softs/dev-projects/website-publisher/src/test/resources/test1.svg" alt=""></p> 
+  </section>  
+ </body>
+</html>

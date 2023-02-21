@@ -34,64 +34,64 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
     }
 
     /**
-     * List of CSS. Just set the path to the CSS scripts
+     * [Optional] List of CSS. Just set the path to the CSS scripts
      */
     private List<String> css;
 
     /**
-     * List of Javascripts. Just set the path of the Javascript scripts.
+     * [Optional] List of Javascripts. Just set the path of the Javascript scripts.
      */
     private List<String> js;
 
 
     /**
-     * Description to add the {@code <meta>} tag with attribute name="description" in HTML {@code <header>}
+     * [Optional] Description to add the {@code <meta>} tag with attribute name="description" in HTML {@code <header>}
      */
     private String metaDescription = null;
 
     /**
-     * List of keywords to add the {@code <meta>} tag with attribute name="keywords" in HTML {@code <header>}
+     * [Optional] List of keywords to add the {@code <meta>} tag with attribute name="keywords" in HTML {@code <header>}
      */
     private String metaKeywords = null;
 
     /**
-     * Author to add to the {@code <meta>} tag with attribute name="author" in HTML {@code <header>}
+     * [Optional] Author to add to the {@code <meta>} tag with attribute name="author" in HTML {@code <header>}
      */
     private String metaAuthor = null;
 
 
     /**
-     * Icon to add to HTML header in {@code <Link>} tag
+     * [Optional] Icon to add to HTML header in {@code <Link>} tag
      */
     private String metaIcon = null;
 
     /**
-     * Path to the markdown file
+     * [Mandatory] Path to the markdown file
      */
     private String markdown = null;
 
     /**
-     * Path to the template file
+     * [Optional] Path to the template file
      */
     private String template = null;
 
     /**
-     * Path to the title image
+     * [Optional] Path to the title image
      */
     private String titleImg = null;
 
     /**
-     * Text to add to {@code <title>} tag
+     * [Optional] Text to add to {@code <title>} tag
      */
     private String titleTxt = null;
 
     /**
-     * Text to set the author of the publication
+     * [Optional] Text to set the author of the publication
      */
     private String author = null;
 
     /**
-     * Text to set the date of the publication
+     * [Optional] Text to set the date of the publication
      */
     private String date = null;
 

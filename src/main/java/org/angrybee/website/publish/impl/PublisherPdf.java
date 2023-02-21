@@ -16,12 +16,17 @@ limitations under the License.
 package org.angrybee.website.publish.impl;
 
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
 import org.w3c.dom.Document;
@@ -31,7 +36,10 @@ import com.openhtmltopdf.svgsupport.BatikSVGDrawer;
 import org.angrybee.website.publish.Publication;
 import org.angrybee.website.publish.Publisher;
 import org.angrybee.website.publish.bean.PublisherBean;
-import org.angrybee.website.publish.bean.PublisherDefaultHtmlBean;
+import org.angrybee.website.publish.bean.PublisherPdfBean;
+import org.angrybee.website.publish.utils.FileUtils;
+import org.angrybee.website.publish.utils.HTMLUtils;
+import org.angrybee.website.publish.utils.Md2Html;
 
 public class PublisherPdf implements Publisher{
 
@@ -43,57 +51,184 @@ public class PublisherPdf implements Publisher{
 	/**
 	 * properties file initialization
 	 */
-	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherDefaultHtml.class.getName());
+	private static ResourceBundle resources = ResourceBundle.getBundle(PublisherPdf.class.getName());
 
 	/**
 	 * Default bean implementation
 	 */
-	private PublisherDefaultHtmlBean publisherBeanImpl;
-   
-    private String resourcesPath;
-
-
-    public void setResourcesPath(String path){
-        resourcesPath = path;
-    }
+	private PublisherPdfBean publisherBeanImpl;
 
 
     @Override
     public void setBean(PublisherBean publisherBeanImpl) {
-        this.publisherBeanImpl = (PublisherDefaultHtmlBean) publisherBeanImpl;
+        this.publisherBeanImpl = (PublisherPdfBean) publisherBeanImpl;
         
     }
 
     @Override
     public Publication publish() {
         
-        
-        //PublisherDefaultHtml publisher = new PublisherDefaultHtml();
-        //publisher.setBean(publisherBeanImpl);
-        //PublicationHtml publicationHtml = (PublicationHtml) publisher.publish();
 
-        try {
-            this.htmlToPdf("/home/vissol/softs/dev-projects/website-publisher/src/test/resources/publish-expected-result2.html",
-                        "/home/vissol/softs/dev-projects/website-publisher/src/test/resources/publish-expected-result2.pdf");
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        File fileTemplate = null;
+        //File fileFont = null;
+
+		//Load template HTML file: default template if not in the Bean
+        if(publisherBeanImpl.getTemplate() != null){
+
+			fileTemplate = new File(publisherBeanImpl.getTemplate());
+
+        } else {
+
+			//Get the default html template if the PublisherDefaultHtmlBean.getTemplate() is empty
+			String template = resources.getString("template");	
+            //String font = resources.getString("font"); 
+
+			try {
+				fileTemplate = new FileUtils().getFileFromResource(template);
+                //fileFont = new FileUtils().getFileFromResource(font);
+
+			} catch (URISyntaxException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}          
+        }
+
+		//Parse the new File (copy of the HTML template)
+		org.jsoup.nodes.Document doc = HTMLUtils.doc(fileTemplate);
+
+		/**
+		 * Add meta informations to the HTML header
+		 */
+
+		 final String CONTENT = "content";
+
+
+		 //Add title to the <title> tag 
+		 if(publisherBeanImpl.getTitleTxt() != null){
+			org.jsoup.nodes.Element metaTitleTxt = HTMLUtils.selectOne(doc, "title");
+			metaTitleTxt.text(publisherBeanImpl.getTitleTxt());
+
+		 }
+		
+
+		//Add date and author
+		if(publisherBeanImpl.getDate() != null || publisherBeanImpl.getAuthor() != null){
+			org.jsoup.nodes.Element authorDate = HTMLUtils.id(doc, "publisher.author.date");
+			authorDate.text(String.format("%s - %s", publisherBeanImpl.getAuthor(), publisherBeanImpl.getDate()));
+		} else {
+			if(publisherBeanImpl.getDate() == null && publisherBeanImpl.getAuthor() == null) {//No author nor date -> we delete Element
+				org.jsoup.nodes.Element authorDate = HTMLUtils.id(doc, "publisher.author.date");
+				authorDate.remove();
+			}
+		}	
+
+        //Add header
+        if(publisherBeanImpl.getHeader() != null){
+            org.jsoup.nodes.Element header = HTMLUtils.id(doc, "header");
+            header.text(publisherBeanImpl.getHeader());
+        }
+
+        //Add footer
+        if(publisherBeanImpl.getFooter() != null){
+            org.jsoup.nodes.Element footer = HTMLUtils.id(doc, "footer");
+            footer.text(publisherBeanImpl.getFooter());
         }
 
 
 
+		File mdFile = null;
+		//Load the file content in String
+		if(publisherBeanImpl.getMarkdown() != null){
+			mdFile = new File(publisherBeanImpl.getMarkdown());
+		} else {
+			//In case of no Markdown for input, we use default markdown to show error but not to block the process.
+			String input = resources.getString("input");	
+
+			try {
+				mdFile = new FileUtils().getFileFromResource(input);
+
+			} catch (URISyntaxException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}  			
+			
+			
+		}
+		
+		//Convert the Markdown string into HTML string
+		String html = Md2Html.convert(FileUtils.getStrContent(mdFile));		
+		//Add html content (from markdown conversion)
+		org.jsoup.nodes.Element content = HTMLUtils.id(doc, "publisher.content");
+		content.html(html);
 
 
 
+		PublicationHtml htmlPub = new PublicationHtml();
+		htmlPub.setDocument(doc);
+
+        
+        //Create temporary folder
+        Path tempPath = null;
+        try {
+            tempPath = Files.createTempDirectory("publisher");
+        } catch (IOException e) {
+           
+            e.printStackTrace();
+        }
 
 
+        String PATH_HTML = tempPath + File.separator + "publish-pdf-input.html";
+        String PATH_PDF = tempPath + File.separator + mdFile.getName() + ".pdf";
+
+        
+        String PATH_RESOURCES = null;
+
+        if(publisherBeanImpl.getResources() != null){
+            PATH_RESOURCES = publisherBeanImpl.getResources();
+        } else {
+            PATH_RESOURCES = mdFile.getAbsolutePath();//By default, path of the Markdown file.
+        }
+
+        try {
+            FileUtils.writeFromString(PATH_HTML, doc.html());
+        } catch (IOException e) {
+            
+            e.printStackTrace();
+        }
+
+        //Get font
+        //FileUtils.duplicate(fileFont.getPath(), PATH_RESOURCES + File.separator + fileFont.getName());
+
+        String baseUri = FileSystems.getDefault().getPath(PATH_RESOURCES).toUri().toString();
+
+
+
+        try {
+            this.htmlToPdf(PATH_HTML, PATH_PDF, baseUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //TODO
         return null;
     }
     
     public static void main(String[] args) {
-        PublisherPdf pdf = new PublisherPdf();
-        pdf.setResourcesPath("/home/vissol/softs/dev-projects/website-publisher/src/test/resources");
-        pdf.publish();
+
+
+       
+		PublisherPdfBean pDefaultBean = new PublisherPdfBean();
+        pDefaultBean.setTitleTxt("Template PDF Formatting article");
+        pDefaultBean.setAuthor("Charles Vissol");
+        pDefaultBean.setDate("February 20, 2023");
+        pDefaultBean.setHeader("Header of page");
+        pDefaultBean.setFooter("Footer of page");
+        //pDefaultBean.setResources("/home/vissol/softs/dev-projects/angrybee-website/articles");
+        pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/cgroups.md");
+        //pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/website-publisher/src/test/resources/publish-pdf-input.md");
+       
+        
+        PublisherPdf pDefault = new PublisherPdf();
+        pDefault.setBean(pDefaultBean);
+        pDefault.publish();
     }
 
     private Document html5ParseDocument(String inputHTML) throws IOException{
@@ -106,17 +241,21 @@ public class PublisherPdf implements Publisher{
 
 
 
-    private void htmlToPdf(String inputHTML, String outputPdf) throws IOException {
+    private void htmlToPdf(String inputHTML, String outputPdf, String baseUri) throws IOException {
         
         Document doc = this.html5ParseDocument(inputHTML);
-
-        String baseUri = FileSystems.getDefault().getPath(resourcesPath).toUri().toString();
 
         OutputStream os = new FileOutputStream(outputPdf);
         PdfRendererBuilder builder = new PdfRendererBuilder();
         builder.withUri(outputPdf);
         //SVG support
         builder.useSVGDrawer(new BatikSVGDrawer());
+
+        System.out.println(baseUri + File.separator + resources.getString("font"));
+
+
+        //builder.useFont(new File(baseUri + File.separator + resources.getString("font")), "CALIBRI-REGULAR");
+
 
         builder.toStream(os);
         
