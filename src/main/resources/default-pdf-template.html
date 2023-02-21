@@ -139,7 +139,8 @@
         padding: 8px 0
     }
 
-
+    .frontmatter a::after { content: leader('.') target-counter(attr(href), page, lower-roman) }
+    .bodymatter a::after { content: leader('.') target-counter(attr(href), page, decimal) }
 
 
 </style>
