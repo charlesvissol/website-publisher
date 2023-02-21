@@ -17,7 +17,6 @@ package org.angrybee.website.publish.impl;
 
 import java.io.File;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;

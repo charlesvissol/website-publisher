@@ -80,13 +80,16 @@
 
         
         pre  {
-            background-color: #e1dede !important;
-            width: 100%!important;
+            /*background-color: #e1dede !important;*/
+            background-color: #1e1e1e !important;
+            color: aliceblue;
+            border-radius: 5px;
+            width: 95%;
             padding: 5px;
             page-break-inside: avoid;
         }
 
-        p > code, blockquote > code {
+        p > code, blockquote > code, td > code, li > code {
             background-color: #e1dede !important;
             
             padding-right: 3px;
@@ -110,6 +113,8 @@
             width: 90%;
             page-break-inside: avoid;
         }
+
+
 
     h1{ page-break-before: always; }
     
@@ -139,8 +144,13 @@
         padding: 8px 0
     }
 
-    .frontmatter a::after { content: leader('.') target-counter(attr(href), page, lower-roman) }
-    .bodymatter a::after { content: leader('.') target-counter(attr(href), page, decimal) }
+
+
+    .toc-row a::after {
+        content: leader('.') target-counter(attr(href), page, decimal);
+    }
+
+
 
 
 </style>
@@ -154,10 +164,7 @@
         integrity="sha512-WDk6RzwygsN9KecRHAfm9HTN87LQjqdygDmkHSJxVkVI7ErCZ8ZWxP6T8RvBujY1n2/E4Ac+bn2ChXnp5rnnHA==" 
         crossorigin="anonymous" 
         referrerpolicy="no-referrer" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.20.0/tocbot.min.js" integrity="sha512-aeQPIoprk35kvJYUFH4nhvm+ASgaUHHBfJQLEfizXatcdcrWFIzNNpG/lf70ePbB1cplRQ2I5/XyMLMZJHFRzQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tocbot/4.20.0/tocbot.css" integrity="sha512-MiKzJ1SHUjeQpWOIKdj1LYmEdnPF076Zeq7en/98oFIfomw5MEbqJ2RhRl+4WHo1ciJyFjFigtgKzXOO50Psrg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+ 
 
         <script>
 	
@@ -166,67 +173,41 @@
             //Enable syntax highlight
             hljs.highlightAll();
     
-    
-    
-    
-            //Toc navigation
-            function nav_to_content(event){
-                var pageToc = document.getElementsByClassName("ab-toc");
-    
-                for (i = 0; i < pageToc.length; i++) {
-                    pageToc[i].style.fontWeight = "normal";
-                }
-                
-                event.currentTarget.style.fontWeight='bold'
-            }
-    
 
         </script>
 </head>
 
 <body>
   <section id="header"></section>
-  
+  <section id="footer"></section>
 
             <!-- Title of the article-->
-            <img data-align="center" alt="" id="publisher.title" title="" src="">
-    
-            <!-- Author and date of publication-->
-            <p id="publisher.author.date"></p>
+           
+            <div style="text-align:center;padding-top: 40%;">
+                <p id="publisher.title.txt" style="font-size: xx-large;"></p>
+                <!-- Author and date of publication-->
+                <p id="publisher.author.date"></p>
+            </div>
+            
+            <div style="page-break-before: always; page-break-after: always;">
+                <p id="publisher.title.txt" style="text-align:center;font-size: larger;">Table of Content</p>
+                <br>
+                <div id="doc.toc" >
+                </div>
+            </div>
+            
+          
+
+           
+
 
   <section id="publisher.content">
         <!-- your content here...-->
   </section>
     
 
-    <footer id="footer">
     
-    </footer>
 
-
-
-
-	<script>
-
-
-		//AnchorJS initialisation
-		anchors.add('h1, h2, h3');
-
-        tocbot.init({
-        tocSelector: '.js-toc',
-        contentSelector: '.js-toc-content',
-        isCollapsedClass: 'is-collapsed',
-        collapseDepth: 0,
-        scrollSmooth: true,
-        scrollSmoothDuration: 420,
-        orderedList: false,
-        activeLinkClass: 'is-active-link',
-        headingSelector: 'h1, h2, h3, h4',
-        hasInnerContainers: true,
-        });
-
-
-
-	</script>    
+   
 </body>
 </html>

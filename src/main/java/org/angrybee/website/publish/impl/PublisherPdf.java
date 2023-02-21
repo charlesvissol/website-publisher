@@ -29,6 +29,8 @@ import java.nio.file.Path;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.w3c.dom.Document;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import com.openhtmltopdf.svgsupport.BatikSVGDrawer;
@@ -41,6 +43,15 @@ import org.angrybee.website.publish.utils.FileUtils;
 import org.angrybee.website.publish.utils.HTMLUtils;
 import org.angrybee.website.publish.utils.Md2Html;
 
+
+
+/**
+ * By default, resources (images,...) attached to the Markdown file to export to the PDF should be in the same folder than the MArkdown file. If not, you 
+ * must specify the resources locations 
+ * 
+ * @author Charles Vissol
+ */
+//TODO Comment the class and add code sample
 public class PublisherPdf implements Publisher{
 
 	/**
@@ -68,6 +79,9 @@ public class PublisherPdf implements Publisher{
     @Override
     public Publication publish() {
         
+
+    
+
 
         File fileTemplate = null;
         //File fileFont = null;
@@ -99,13 +113,12 @@ public class PublisherPdf implements Publisher{
 		 * Add meta informations to the HTML header
 		 */
 
-		 final String CONTENT = "content";
-
-
-		 //Add title to the <title> tag 
+		 //Add title to the <title> tag + article title
 		 if(publisherBeanImpl.getTitleTxt() != null){
 			org.jsoup.nodes.Element metaTitleTxt = HTMLUtils.selectOne(doc, "title");
 			metaTitleTxt.text(publisherBeanImpl.getTitleTxt());
+            org.jsoup.nodes.Element articleTitleTxt = HTMLUtils.id(doc, "publisher.title.txt");
+            articleTitleTxt.text(publisherBeanImpl.getTitleTxt());
 
 		 }
 		
@@ -160,9 +173,41 @@ public class PublisherPdf implements Publisher{
 		content.html(html);
 
 
+        /**
+         * Create the table of content for the first 3 titles
+         */
+
+        Elements headers = doc.select("h1, h2, h3");
+
+        org.jsoup.nodes.Element toc = HTMLUtils.id(doc, "doc.toc");
+        
+
+        int tocIndex = 0;
+
+        for (Element header : headers) {
+            header.id(String.valueOf(tocIndex));
+
+            org.jsoup.nodes.Element div = new Element("div").addClass("toc-row");
+            org.jsoup.nodes.Element a = new Element("a");
+            a.attr("href", "#" + String.valueOf(tocIndex));
+            a.attr("style", "text-decoration: none;");
+            a.text(header.text());
+            div.appendChild(a);
+
+            toc.appendChild(div);
+
+            tocIndex++;
+        }
+
+        
+
 
 		PublicationHtml htmlPub = new PublicationHtml();
 		htmlPub.setDocument(doc);
+
+
+
+
 
         
         //Create temporary folder
@@ -207,6 +252,11 @@ public class PublisherPdf implements Publisher{
             e.printStackTrace();
         }
 
+
+        //Delete HTML template file
+        new File(PATH_HTML).delete();
+
+
         //TODO
         return null;
     }
@@ -220,7 +270,7 @@ public class PublisherPdf implements Publisher{
         pDefaultBean.setAuthor("Charles Vissol");
         pDefaultBean.setDate("February 20, 2023");
         pDefaultBean.setHeader("Header of page");
-        pDefaultBean.setFooter("Footer of page");
+        pDefaultBean.setFooter("This is a very long footer of page ");
         //pDefaultBean.setResources("/home/vissol/softs/dev-projects/angrybee-website/articles");
         pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/cgroups.md");
         //pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/website-publisher/src/test/resources/publish-pdf-input.md");
@@ -250,12 +300,6 @@ public class PublisherPdf implements Publisher{
         builder.withUri(outputPdf);
         //SVG support
         builder.useSVGDrawer(new BatikSVGDrawer());
-
-        System.out.println(baseUri + File.separator + resources.getString("font"));
-
-
-        //builder.useFont(new File(baseUri + File.separator + resources.getString("font")), "CALIBRI-REGULAR");
-
 
         builder.toStream(os);
         
