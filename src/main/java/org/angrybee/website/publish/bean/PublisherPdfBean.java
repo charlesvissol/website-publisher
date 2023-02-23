@@ -17,6 +17,12 @@ package org.angrybee.website.publish.bean;
 
 public class PublisherPdfBean implements PublisherBean {
 
+
+    /**
+     * [Optional] Watermark
+     */
+    private String watermark;
+
     /**
      * [Optional] Footer content
      */
@@ -56,6 +62,22 @@ public class PublisherPdfBean implements PublisherBean {
      * [Optional] Text to set the date of the publication
      */
     private String date = null;
+
+
+
+
+
+
+
+
+    public String getWatermark() {
+        return watermark;
+    }
+
+    public void setWatermark(String watermark) {
+        this.watermark = watermark;
+    }
+
 
     public String getResources() {
         return resources;

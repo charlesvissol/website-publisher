@@ -42,6 +42,13 @@ import org.angrybee.website.publish.bean.PublisherPdfBean;
 import org.angrybee.website.publish.utils.FileUtils;
 import org.angrybee.website.publish.utils.HTMLUtils;
 import org.angrybee.website.publish.utils.Md2Html;
+import org.angrybee.website.publish.utils.PDFWatermarkUtils;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
 
 
 
@@ -120,7 +127,7 @@ public class PublisherPdf implements Publisher{
             org.jsoup.nodes.Element articleTitleTxt = HTMLUtils.id(doc, "publisher.title.txt");
             articleTitleTxt.text(publisherBeanImpl.getTitleTxt());
 
-		 }
+		 }//If no title to store, do nothing
 		
 
 		//Add date and author
@@ -138,12 +145,18 @@ public class PublisherPdf implements Publisher{
         if(publisherBeanImpl.getHeader() != null){
             org.jsoup.nodes.Element header = HTMLUtils.id(doc, "header");
             header.text(publisherBeanImpl.getHeader());
+        } else {//If nothing to write, remove the tag
+            org.jsoup.nodes.Element header = HTMLUtils.id(doc, "header");
+            header.remove();
         }
 
         //Add footer
         if(publisherBeanImpl.getFooter() != null){
             org.jsoup.nodes.Element footer = HTMLUtils.id(doc, "footer");
             footer.text(publisherBeanImpl.getFooter());
+        } else {//If nothing to write, remove the tag
+            org.jsoup.nodes.Element footer = HTMLUtils.id(doc, "footer");
+            footer.remove();
         }
 
 
@@ -215,8 +228,7 @@ public class PublisherPdf implements Publisher{
         try {
             tempPath = Files.createTempDirectory("publisher");
         } catch (IOException e) {
-           
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
 
@@ -235,8 +247,7 @@ public class PublisherPdf implements Publisher{
         try {
             FileUtils.writeFromString(PATH_HTML, doc.html());
         } catch (IOException e) {
-            
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
         //Get font
@@ -245,12 +256,35 @@ public class PublisherPdf implements Publisher{
         String baseUri = FileSystems.getDefault().getPath(PATH_RESOURCES).toUri().toString();
 
 
-
+        /**
+         * Create the PDF
+         */
         try {
             this.htmlToPdf(PATH_HTML, PATH_PDF, baseUri);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
+
+
+        if(publisherBeanImpl.getWatermark() != null){
+            String PATH_PDF_WATERMARK = tempPath + File.separator + mdFile.getName() + "_watermark.pdf";
+            
+            File srcFile = new File(PATH_PDF);
+            File dstFile = new File(PATH_PDF_WATERMARK);
+
+            try (PDDocument watermarkPdf = Loader.loadPDF(srcFile))
+            {
+                for (PDPage page : watermarkPdf.getPages())
+                {
+                    PDFont font = new PDType1Font(FontName.TIMES_BOLD);
+                    PDFWatermarkUtils.addWatermarkText(watermarkPdf, page, font, publisherBeanImpl.getWatermark());
+                }
+                watermarkPdf.save(dstFile);
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage(), e);
+            }            
+        }
+
 
 
         //Delete HTML template file
@@ -267,9 +301,10 @@ public class PublisherPdf implements Publisher{
        
 		PublisherPdfBean pDefaultBean = new PublisherPdfBean();
         pDefaultBean.setTitleTxt("Template PDF Formatting article");
+        pDefaultBean.setWatermark("Watermark!!!");
         pDefaultBean.setAuthor("Charles Vissol");
         pDefaultBean.setDate("February 20, 2023");
-        pDefaultBean.setHeader("Header of page");
+        //pDefaultBean.setHeader("Header of the page");
         pDefaultBean.setFooter("This is a very long footer of page ");
         //pDefaultBean.setResources("/home/vissol/softs/dev-projects/angrybee-website/articles");
         pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/cgroups.md");
