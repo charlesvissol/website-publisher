@@ -16,12 +16,14 @@ limitations under the License.
 package org.angrybee.website.publish.impl;
 
 import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -43,12 +45,14 @@ import org.angrybee.website.publish.utils.FileUtils;
 import org.angrybee.website.publish.utils.HTMLUtils;
 import org.angrybee.website.publish.utils.Md2Html;
 import org.angrybee.website.publish.utils.PDFWatermarkUtils;
-import org.apache.pdfbox.Loader;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName;
+
 
 
 
@@ -213,14 +217,8 @@ public class PublisherPdf implements Publisher{
         }
 
         
-
-
 		PublicationHtml htmlPub = new PublicationHtml();
 		htmlPub.setDocument(doc);
-
-
-
-
 
         
         //Create temporary folder
@@ -234,7 +232,7 @@ public class PublisherPdf implements Publisher{
 
         String PATH_HTML = tempPath + File.separator + "publish-pdf-input.html";
         String PATH_PDF = tempPath + File.separator + mdFile.getName() + ".pdf";
-
+        
         
         String PATH_RESOURCES = null;
 
@@ -266,17 +264,20 @@ public class PublisherPdf implements Publisher{
         }
 
 
+        /**
+         * Create watermark to each page
+         */
         if(publisherBeanImpl.getWatermark() != null){
             String PATH_PDF_WATERMARK = tempPath + File.separator + mdFile.getName() + "_watermark.pdf";
             
             File srcFile = new File(PATH_PDF);
             File dstFile = new File(PATH_PDF_WATERMARK);
 
-            try (PDDocument watermarkPdf = Loader.loadPDF(srcFile))
+            try (PDDocument watermarkPdf = PDDocument.load(srcFile))
             {
                 for (PDPage page : watermarkPdf.getPages())
                 {
-                    PDFont font = new PDType1Font(FontName.TIMES_BOLD);
+                    PDFont font = PDType1Font.HELVETICA;
                     PDFWatermarkUtils.addWatermarkText(watermarkPdf, page, font, publisherBeanImpl.getWatermark());
                 }
                 watermarkPdf.save(dstFile);
@@ -284,6 +285,42 @@ public class PublisherPdf implements Publisher{
                 logger.log(Level.SEVERE, e.getMessage(), e);
             }            
         }
+
+
+        //TODO Add condition with Bean content & integrate Watermark with encrypted file
+        File srcFile = new File(PATH_PDF);
+        PDDocument permissionPdf = null;
+        try 
+        {
+            String PATH_PDF_PROTECTED = tempPath + File.separator + mdFile.getName() + "_encrypt.pdf";
+            //TODO dstFile if watermark
+            permissionPdf = PDDocument.load(srcFile);
+            AccessPermission ap = new AccessPermission();
+            
+            ap.setCanModify(false);
+            ap.setCanExtractContent(false);
+            ap.setCanPrint(false);
+            ap.setReadOnly();
+
+            //TODO password owner + user to define
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(UUID.randomUUID().toString(), "1234", ap);
+
+            spp.setPermissions(ap);
+
+
+            permissionPdf.protect(spp);
+                     
+            permissionPdf.save(PATH_PDF_PROTECTED);
+            permissionPdf.close();
+
+
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        } 
+
+
+
+
 
 
 
@@ -304,7 +341,7 @@ public class PublisherPdf implements Publisher{
         pDefaultBean.setWatermark("Watermark!!!");
         pDefaultBean.setAuthor("Charles Vissol");
         pDefaultBean.setDate("February 20, 2023");
-        //pDefaultBean.setHeader("Header of the page");
+        pDefaultBean.setHeader("Header of the page");
         pDefaultBean.setFooter("This is a very long footer of page ");
         //pDefaultBean.setResources("/home/vissol/softs/dev-projects/angrybee-website/articles");
         pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/cgroups.md");
