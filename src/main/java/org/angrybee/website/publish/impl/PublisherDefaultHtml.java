@@ -203,12 +203,24 @@ public class PublisherDefaultHtml implements Publisher {
 			} catch (URISyntaxException e) {
 				logger.log(Level.SEVERE, e.getMessage(), e);
 			}  			
-			
-			
 		}
 		
-		//Convert the Markdown string into HTML string
-		String html = Md2Html.convert(FileUtils.getStrContent(mdFile));		
+		//Load the Markdown file content in String and convert into HTML
+		String html = null;
+		if(publisherBeanImpl.getMarkdown() != null){
+			html = Md2Html.convert(publisherBeanImpl.getMarkdown());
+		} else {
+			//In case of no Markdown for input, we use default markdown to show error but not to block the process.
+			String input = resources.getString("input");	
+
+			try {
+				html = Md2Html.convert(FileUtils.getStrContent(new FileUtils().getFileFromResource(input)));
+
+			} catch (URISyntaxException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}  			
+		}
+	
 		//Add html content (from markdown conversion)
 		Element content = HTMLUtils.id(doc, "publisher.content");
 		content.html(html);

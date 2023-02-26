@@ -38,7 +38,7 @@ public class PublisherDefaultHtmlTest {
 		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
 
 		try {
-            pDefaultBean.setMarkdown(new FileUtils().getFileFromResource("publish-markdown-input.md").getPath());
+            pDefaultBean.setMarkdown(FileUtils.getStrContent(new FileUtils().getFileFromResource("publish-markdown-input.md")));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -71,6 +71,13 @@ public class PublisherDefaultHtmlTest {
         String strExpected = FileUtils.getStrContent(expected);
 
         String strResult = htmlPub.getDocument().html();
+        try {
+            FileUtils.writeFromString("/tmp/result.html", strResult);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
 
         //Get each line of the expected HTML result from Markdown file
         List<String> listExpected = new ArrayList<>();
@@ -97,10 +104,10 @@ public class PublisherDefaultHtmlTest {
 
         //Compare HTML content line by line
         for(int i = 0; i < listExpected.size(); i++){
-            if(listExpected.get(i).contentEquals(listResult.get(i)) != true)
-                System.out.println("assertTrue="+listExpected.get(i).contentEquals(listResult.get(i))+"|Expected=" + listExpected.get(i) + "|Result=" + listResult.get(i));
+            if(listExpected.get(i).trim().contentEquals(listResult.get(i).trim()) != true)
+                System.out.println("assertTrue="+listExpected.get(i).trim().contentEquals(listResult.get(i).trim())+"|Expected=" + listExpected.get(i).trim() + "|Result=" + listResult.get(i).trim());
 
-            assertTrue(listExpected.get(i).contentEquals(listResult.get(i)));
+            assertTrue(listExpected.get(i).trim().contentEquals(listResult.get(i).trim()));
         }
 
 

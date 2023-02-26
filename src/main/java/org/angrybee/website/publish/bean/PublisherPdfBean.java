@@ -18,6 +18,19 @@ package org.angrybee.website.publish.bean;
 public class PublisherPdfBean implements PublisherBean {
 
 
+
+
+    /**
+     * Owner password of the PDF
+     */
+    private String ownerPassword;
+
+    /**
+     * User password of the PDF
+     */
+    private String userPassword;
+
+
     /**
      * [Optional] Watermark
      */
@@ -39,12 +52,12 @@ public class PublisherPdfBean implements PublisherBean {
     private String resources;
 
     /**
-     * [Mandatory] Path to the markdown file
+     * [Mandatory] Markdown file path
      */
     private String markdown = null;
 
     /**
-     * [Optional] Path to the template file
+     * [Optional] Template file path
      */
     private String template = null;
 
@@ -66,9 +79,21 @@ public class PublisherPdfBean implements PublisherBean {
 
 
 
+    public String getOwnerPassword() {
+        return ownerPassword;
+    }
 
+    public void setOwnerPassword(String ownerPassword) {
+        this.ownerPassword = ownerPassword;
+    }
 
+    public String getUserPassword() {
+        return userPassword;
+    }
 
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
 
     public String getWatermark() {
         return watermark;

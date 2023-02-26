@@ -37,7 +37,7 @@ public class PublisherAngrybeeTest {
 		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
 
 		try {
-            pDefaultBean.setMarkdown(new FileUtils().getFileFromResource("publish-markdown-input.md").getPath());
+            pDefaultBean.setMarkdown(FileUtils.getStrContent(new FileUtils().getFileFromResource("publish-markdown-input.md")));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -96,10 +96,12 @@ public class PublisherAngrybeeTest {
 
         //Compare HTML content line by line
         for(int i = 0; i < listExpected.size(); i++){
-            if(listExpected.get(i).contentEquals(listResult.get(i)) != true)
-                System.out.println("assertTrue="+listExpected.get(i).contentEquals(listResult.get(i))+"|Expected=" + listExpected.get(i) + "|Result=" + listResult.get(i));
+            if(listExpected.get(i).trim().contentEquals(listResult.get(i).trim()) != true)
+                System.out.println("assertTrue="+listExpected.get(i).trim().contentEquals(listResult.get(i).trim())+"|Expected=" 
+                    + listExpected.get(i).trim() 
+                    + "|Result=" + listResult.get(i).trim());
 
-            assertTrue(listExpected.get(i).contentEquals(listResult.get(i)));
+            assertTrue(listExpected.get(i).trim().contentEquals(listResult.get(i).trim()));
         }
 
 

@@ -66,12 +66,12 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
     private String metaIcon = null;
 
     /**
-     * [Mandatory] Path to the markdown file
+     * [Mandatory] Markdown file content
      */
     private String markdown = null;
 
     /**
-     * [Optional] Path to the template file
+     * [Optional] Template file content
      */
     private String template = null;
 

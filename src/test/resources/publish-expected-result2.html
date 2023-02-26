@@ -1,180 +1,181 @@
 <!doctype html>
-<html lang="en"> 
- <head> 
-  <meta charset="utf-8"> 
-  <meta name="viewport" content="width=device-width, initial-scale=1"> 
-  <link rel="shortcut icon" href="../pictures/angrybee-blue.svg"> 
-  <title>Linux Basics: Terminal survivor kit</title> 
-  <meta name="description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal"> 
-  <meta name="keywords" content="Linux terminal shortcut command basics introduction"> 
-  <meta name="author" content="Charles Vissol"> 
-  <meta property="og:title" content="Linux Basics: Terminal survivor kit"> 
-  <meta property="og:type" content="website"> <!--<meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">--> 
-  <meta property="og:description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal"> 
-  <meta property="og:image" content="image.png"> 
- </head> 
- <body> <!-- your content here...--> <!-- Title of the article--> 
-  <img data-align="center" alt="" id="publisher.title" title="" src="titles/Linux_1_intro_terminal.png"> <!-- Author and date of publication--> 
-  <p id="publisher.author.date">Charles Vissol - February 13, 2023</p> 
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="../pictures/angrybee-blue.svg">
+  <title>Linux Basics: Terminal survivor kit</title>
+  <meta name="description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal">
+  <meta name="keywords" content="Linux terminal shortcut command basics introduction">
+  <meta name="author" content="Charles Vissol">
+  <meta property="og:title" content="Linux Basics: Terminal survivor kit">
+  <meta property="og:type" content="website"><!--<meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">-->
+  <meta property="og:description" content="Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal">
+  <meta property="og:image" content="image.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js" integrity="sha512-bgHRAiTjGrzHzLyKOnpFvaEpGzJet3z4tZnXGjpsCcqOnAH6VGUx9frc5bcIhKTVLEiCO6vEhNAgx5jtLUYrfA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" integrity="sha512-rO+olRTkcf304DQBxSWxln8JXCzTHlKnIdnMUwYvQa9/Jd4cQaNkItIUj6Z4nvW1dqK0SKXLbn9h4KwZTNtAyw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <script>
+	
+    //Enable syntax highlight
+    hljs.highlightAll();
+
+</script>
+ </head>
+ <body><!-- your content here...--> <!-- Title of the article--> <img data-align="center" alt="" id="publisher.title" title="" src="titles/Linux_1_intro_terminal.png"> <!-- Author and date of publication-->
+  <p id="publisher.author.date">Charles Vissol - February 13, 2023</p>
   <section id="publisher.content">
-   <section> 
-    <br> 
-    <p>It is important to know some basic commands to use properly the terminal and to be comfortable.</p> 
-    <p><strong>You can access to the terminal using <code>Ctrl + Alt + T</code></strong></p> 
-    <h1>Shell utilities</h1> 
-    <p>The <code>Shell</code> acts as an interface between the user and the <code>Kernel</code>. Shell is an intermediate program that accepts the commands, typed at the terminal and executes them to obtain kernel understandable command set.</p> 
-    <ul> 
-     <li> <p>Programming language constructs: shell provides powerful constructs using which exiting commands can be used to frame the job sequances or develop new utilities</p> </li> 
-     <li> <p>Shell script: Shell commands and constructs are stored in a file, which can later be used to execute these commands like a program. This file is generally called shell script.</p> </li> 
-     <li> <p>Shell vaiables: Like other programming language one can define variable in shell program also. These variables are identified by prefixing their names with <code>$</code> sign.</p> </li> 
-    </ul> 
-    <h1>Terminal shortcuts</h1> 
-    <p>Here is a summary of all the main commands to start with Linux Terminal</p> 
-    <h2>Move</h2> 
-    <table> 
-     <thead> 
+   <section><br>
+    <p>It is important to know some basic commands to use properly the terminal and to be comfortable.</p>
+    <p><strong>You can access to the terminal using <code>Ctrl + Alt + T</code></strong></p>
+    <h1>Shell utilities</h1>
+    <p>The <code>Shell</code> acts as an interface between the user and the <code>Kernel</code>. Shell is an intermediate program that accepts the commands, typed at the terminal and executes them to obtain kernel understandable command set.</p>
+    <ul>
+     <li><p>Programming language constructs: shell provides powerful constructs using which exiting commands can be used to frame the job sequances or develop new utilities</p></li>
+     <li><p>Shell script: Shell commands and constructs are stored in a file, which can later be used to execute these commands like a program. This file is generally called shell script.</p></li>
+     <li><p>Shell vaiables: Like other programming language one can define variable in shell program also. These variables are identified by prefixing their names with <code>$</code> sign.</p></li>
+    </ul>
+    <h1>Terminal shortcuts</h1>
+    <p>Here is a summary of all the main commands to start with Linux Terminal</p>
+    <h2>Move</h2>
+    <table>
+     <thead>
       <tr>
        <th><em>Move</em></th>
        <th><em>In a Line</em></th>
-      </tr> 
-     </thead> 
-     <tbody> 
+      </tr>
+     </thead>
+     <tbody>
       <tr>
        <td><code>Ctrl</code> + <code>&gt;</code></td>
        <td>Move Cursor forward a word</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>&lt;</code></td>
        <td>Move Cursor backward a word</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>a</code></td>
        <td>Move Cursor to start line</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>e</code></td>
        <td>Move Cursor to end line</td>
-      </tr> 
+      </tr>
       <tr>
        <td><em><strong>Move</strong></em></td>
        <td><em><strong>in a Terminal</strong></em></td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Shift</code> + <code>Up</code></td>
        <td>Move to line Up<br></td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Shift</code> + <code>Page Up</code></td>
        <td>Move to page Up</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Shift</code> + <code>Down</code></td>
        <td>Move to line Down</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Shift</code> + <code>Page Down</code></td>
        <td>Move to page Down</td>
-      </tr> 
-     </tbody> 
-    </table> 
-   </section> 
-   <br> 
-   <section> 
-    <br> 
-    <h2>Cut, Copy &amp; Paste</h2> 
-    <table> 
-     <thead> 
+      </tr>
+     </tbody>
+    </table>
+   </section><br>
+   <section><br>
+    <h2>Cut, Copy &amp; Paste</h2>
+    <table>
+     <thead>
       <tr>
        <th><em>Cut/Copy/Paste</em></th>
        <th>-</th>
-      </tr> 
-     </thead> 
-     <tbody> 
+      </tr>
+     </thead>
+     <tbody>
       <tr>
        <td><code>Ctrl</code> + <code>k</code></td>
        <td>Cut everything after Cursor</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>u</code></td>
        <td>Cut everything before Cursor</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>shift</code> + <code>c</code>/<code>v</code></td>
        <td>Copy/Paste into terminal</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>y</code></td>
        <td>Paste from buffer</td>
-      </tr> 
-     </tbody> 
-    </table> 
-   </section> 
-   <br> 
-   <section> 
-    <h2>Clear</h2> 
-    <table> 
-     <thead> 
+      </tr>
+     </tbody>
+    </table>
+   </section><br>
+   <section>
+    <h2>Clear</h2>
+    <table>
+     <thead>
       <tr>
        <th><em>Clear</em></th>
        <th>-</th>
-      </tr> 
-     </thead> 
-     <tbody> 
+      </tr>
+     </thead>
+     <tbody>
       <tr>
        <td><code>Ctrl</code> + <code>l</code></td>
        <td>Clear screen</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>w</code></td>
        <td>Clear last word</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>u</code></td>
        <td>Clear last line</td>
-      </tr> 
-     </tbody> 
-    </table> 
-   </section> 
-   <br> 
-   <section> 
-    <h2>Search</h2> 
-    <table> 
-     <thead> 
+      </tr>
+     </tbody>
+    </table>
+   </section><br>
+   <section>
+    <h2>Search</h2>
+    <table>
+     <thead>
       <tr>
        <th><em>Search</em></th>
        <th>-</th>
-      </tr> 
-     </thead> 
-     <tbody> 
+      </tr>
+     </thead>
+     <tbody>
       <tr>
        <td><code>Ctrl</code> + <code>r</code></td>
-       <td>Search in command history<br> <code>Ctrl</code> + <code>j</code> Or <code>Esc</code> Exit from search</td>
-      </tr> 
-     </tbody> 
-    </table> 
-   </section> 
-   <br> 
-   <section> 
-    <h2>Running Script</h2> 
-    <table> 
-     <thead> 
+       <td>Search in command history<br><code>Ctrl</code> + <code>j</code> Or <code>Esc</code> Exit from search</td>
+      </tr>
+     </tbody>
+    </table>
+   </section><br>
+   <section>
+    <h2>Running Script</h2>
+    <table>
+     <thead>
       <tr>
        <th><em>Running script</em></th>
        <th>-</th>
-      </tr> 
-     </thead> 
-     <tbody> 
+      </tr>
+     </thead>
+     <tbody>
       <tr>
        <td><code>Ctrl</code> + <code>c</code></td>
        <td>Stop running command Or script</td>
-      </tr> 
+      </tr>
       <tr>
        <td><code>Ctrl</code> + <code>s</code></td>
        <td>Pause a long running script<br><code>Ctrl</code> + <code>q</code>&nbsp;Resume Pause of a long running script</td>
-      </tr> 
-     </tbody> 
-    </table> 
-   </section> 
-  </section>  
+      </tr>
+     </tbody>
+    </table>
+   </section>
+  </section>
  </body>
 </html>

@@ -49,51 +49,27 @@ import org.jsoup.select.Elements;
  * <p>Example of usage without Json:</p>
  * <pre><code>
  * 	
- *
  *		PublisherAngrybee pDefault = new PublisherAngrybee();
- *		PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
+ *		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
  *
- *		List&lt;String&gt; css = new ArrayList&lt;&gt;();}
- *      css.add("first.css");
- *      css.add("second.css");
+ *		try {
+ *           pDefaultBean.setMarkdown(FileUtils.getStrContent(new FileUtils().getFileFromResource("publish-markdown-input.md")));
+ *        } catch (URISyntaxException e) {
+ *            e.printStackTrace();
+ *        }
+ *		pDefaultBean.setAuthor("Charles Vissol");
+ *      pDefaultBean.setMetaAuthor("Charles Vissol");
+ *		pDefaultBean.setDate("February 13, 2023");
+ *		pDefaultBean.setTitleImg("Linux_1_intro_terminal.png");
+ *		pDefaultBean.setMetaDescription("Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal");
+ *		pDefaultBean.setMetaKeywords("Linux terminal shortcut command basics introduction");
+ *		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
+ *		pDefaultBean.setTitleTxt("Linux Basics: Terminal survivor kit");
  *
- *      List&lt;String&gt; js = new ArrayList&lt;&gt;();}
- *      js.add("first.js");
- *      js.add("second.js");
- *
- *      bean.setCss(css);
- *      bean.setJs(js);
- *      bean.setTemplate("/tmp/template.html");
- *      bean.setMetaAuthor("Charles Vissol");
- *      bean.setMetaDescription("Description of the article");
- *      bean.setMetaKeywords("article angrybee for publishing");
- *      bean.setMetaIcon("pictures/angrybee.svg");
- *      bean.setMarkdown("/tmp/article.md");
- *      bean.setTitleImg("pictures/title.svg");
- *      bean.setTitleTxt("this is a title");
- *      bean.setAuthor("Charles Vissol");
- *      bean.setDate("February 2, 2023");
- *
- *		pDefault.getBean(bean);
+ *		pDefault.setBean(pDefaultBean);
  *		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
  *
  *	
- * </code>
- * </pre>
- * 
- * <p>Example with Json:</p>
- * <pre>
- * <code>
- * 
- *      PublisherAngrybee pDefault = new PublisherAngrybee();
- *      PublisherDefaultHtmlBean bean = new PublisherDefaultHtmlBean();
- * 
- *      String jsonPath = System.getProperty("java.io.tmpdir") + "/publisher.json";
- *      bean = (PublisherDefaultHtmlBean) Json.read(jsonPath, bean);
- * 
- *      pDefault.getBean(bean);
- *      PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
- * 
  * </code>
  * </pre>
  * 
@@ -209,10 +185,23 @@ public class PublisherAngrybee implements Publisher {
 		}	
 
 
-		//Load the file content in String
-		File mdFile = new File(publisherBeanImpl.getMarkdown());
-		//Convert the Markdown string into HTML string
-		String html = Md2Html.convert(FileUtils.getStrContent(mdFile));		
+		//Load the Markdown file content in String and convert into HTML
+		String html = null;
+		if(publisherBeanImpl.getMarkdown() != null){
+			html = Md2Html.convert(publisherBeanImpl.getMarkdown());
+		} else {
+			//In case of no Markdown for input, we use default markdown to show error but not to block the process.
+			String input = resources.getString("input");	
+
+			try {
+				html = Md2Html.convert(FileUtils.getStrContent(new FileUtils().getFileFromResource(input)));
+
+			} catch (URISyntaxException e) {
+				logger.log(Level.SEVERE, e.getMessage(), e);
+			}  			
+		}
+		
+		
 		//Add html content (from markdown conversion)
 		Element content = HTMLUtils.id(doc, "publisher.content");
 		content.html(html);

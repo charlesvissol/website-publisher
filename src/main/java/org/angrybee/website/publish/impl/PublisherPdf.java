@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Time;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
@@ -67,7 +68,7 @@ public class PublisherPdf implements Publisher{
 	/**
 	 * Logger initialization
 	 */
-	static final Logger logger = Logger.getLogger(PublisherDefaultHtml.class.getName());
+	static final Logger logger = Logger.getLogger(PublisherPdf.class.getName());
 
 	/**
 	 * properties file initialization
@@ -88,7 +89,7 @@ public class PublisherPdf implements Publisher{
 
     @Override
     public Publication publish() {
-        
+
 
     
 
@@ -219,8 +220,7 @@ public class PublisherPdf implements Publisher{
 		PublicationHtml htmlPub = new PublicationHtml();
 		htmlPub.setDocument(doc);
 
-        
-        //Create temporary folder
+
         Path tempPath = null;
         try {
             tempPath = Files.createTempDirectory("publisher");
@@ -266,8 +266,9 @@ public class PublisherPdf implements Publisher{
         /**
          * Create watermark to each page
          */
+        String PATH_PDF_WATERMARK = null;
         if(publisherBeanImpl.getWatermark() != null){
-            String PATH_PDF_WATERMARK = tempPath + File.separator + mdFile.getName() + "_watermark.pdf";
+            PATH_PDF_WATERMARK = tempPath + File.separator + mdFile.getName() + "_watermark.pdf";
             
             File srcFile = new File(PATH_PDF);
             File dstFile = new File(PATH_PDF_WATERMARK);
@@ -286,13 +287,39 @@ public class PublisherPdf implements Publisher{
         }
 
 
-        //TODO Add condition with Bean content & integrate Watermark with encrypted file
-        File srcFile = new File(PATH_PDF);
+        /**
+         * Secure PDF with password
+         */
+        String PATH_PDF_PROTECTED = null;
+        if(publisherBeanImpl.getWatermark() != null){
+            PATH_PDF_PROTECTED = PATH_PDF_WATERMARK;
+        } else {
+            PATH_PDF_PROTECTED = PATH_PDF;
+        }
+
+        /**
+         * Set the passwords
+         */
+        String ownerPassword = null;
+        String userPassword = null;
+
+        if(publisherBeanImpl.getOwnerPassword() !=null && publisherBeanImpl.getUserPassword() != null) {
+            ownerPassword = publisherBeanImpl.getOwnerPassword();
+            userPassword = publisherBeanImpl.getUserPassword();
+        } else {
+            ownerPassword = "1234";
+            userPassword = "1234";
+        }
+
+
+
+        File srcFile = new File(PATH_PDF_PROTECTED);
         PDDocument permissionPdf = null;
+        
         try 
         {
-            String PATH_PDF_PROTECTED = tempPath + File.separator + mdFile.getName() + "_encrypt.pdf";
-            //TODO dstFile if watermark
+            
+            
             permissionPdf = PDDocument.load(srcFile);
             AccessPermission ap = new AccessPermission();
             
@@ -301,8 +328,7 @@ public class PublisherPdf implements Publisher{
             ap.setCanPrint(false);
             ap.setReadOnly();
 
-            //TODO password owner + user to define
-            StandardProtectionPolicy spp = new StandardProtectionPolicy(UUID.randomUUID().toString(), "1234", ap);
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(ownerPassword, userPassword, ap);
 
             spp.setPermissions(ap);
 
@@ -316,12 +342,6 @@ public class PublisherPdf implements Publisher{
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         } 
-
-
-
-
-
-
 
         //Delete HTML template file
         new File(PATH_HTML).delete();

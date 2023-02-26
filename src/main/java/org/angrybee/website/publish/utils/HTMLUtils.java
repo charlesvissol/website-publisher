@@ -17,6 +17,7 @@ package org.angrybee.website.publish.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.jsoup.Jsoup;
@@ -42,6 +43,17 @@ public class HTMLUtils {
      */
     private HTMLUtils(){}
 
+    /**
+     * Load {@link org.jsoup.nodes.Document} object by using JSoup library
+     * @param html HTML String content
+     * @return {@link org.jsoup.nodes.Document} 
+     */
+    public static Document doc(String html){           
+            return Jsoup.parse(html);
+    }
+
+
+
 
     /**
      * Load {@link org.jsoup.nodes.Document} object by using JSoup library
@@ -50,9 +62,10 @@ public class HTMLUtils {
      */
     public static Document doc(File path){
         try {
+            
             return Jsoup.parse(path, "UTF-8");
         } catch (IOException e) {
-            logger.info(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         } //parse the html document
         return null;
     }
