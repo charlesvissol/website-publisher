@@ -47,6 +47,12 @@ public class PDFProtectUtils {
 	 */
 	static final Logger logger = Logger.getLogger(PDFProtectUtils.class.getName());
 
+    /**
+	 * Default constructor
+	 */
+	private PDFProtectUtils(){
+		/* Default constructor */
+	}
 
     /**
      * <code>main()</code> method to call directly from command line to generate an encrypted PDF.

@@ -133,7 +133,12 @@ public class PublisherPdf implements Publisher{
      */
     private String newWorkingDir = null;
 
-
+	/**
+	 * Default constructor
+	 */
+	public PublisherPdf(){
+		/* Default constructor */
+	}
 
     @Override
     public void setBean(PublisherBean publisherBeanImpl) {

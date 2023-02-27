@@ -68,14 +68,34 @@
 				<version>3.3.0</version>
 				<configuration>
 				<includes>
-					<include>*.vm</include>
+					<include>*.*</include>
 				</includes>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.3.0</version> 
+
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/</directory>
+									
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

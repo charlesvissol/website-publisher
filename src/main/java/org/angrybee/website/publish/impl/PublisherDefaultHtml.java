@@ -63,7 +63,7 @@ import org.jsoup.nodes.Element;
  *		pDefault.setBean(pDefaultBean);
  *		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
  * 
- * </pre></code>
+ * </code></pre>
  * 
  * @author Charles Vissol
  */
