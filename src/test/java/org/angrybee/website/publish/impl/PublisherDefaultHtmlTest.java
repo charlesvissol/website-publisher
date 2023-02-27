@@ -74,7 +74,6 @@ public class PublisherDefaultHtmlTest {
         try {
             FileUtils.writeFromString("/tmp/result.html", strResult);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

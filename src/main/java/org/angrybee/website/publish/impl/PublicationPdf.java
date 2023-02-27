@@ -16,6 +16,7 @@ limitations under the License.
 package org.angrybee.website.publish.impl;
 
 import org.angrybee.website.publish.Publication;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.jsoup.nodes.Document;
 
 public class PublicationPdf implements Publication{
@@ -25,17 +26,108 @@ public class PublicationPdf implements Publication{
     public PublicationPdf(){
         /* Default constructor */
     }
+
+
+    /**
+     * Output directory were the output PDF files are located 
+     */
+    private String outputDir;
+
+
     /**
      * Jsoup Document object = Abstract instance of the HTML document using Jsoup library
      */
-    private Document doc;
+    private Document html;
+
+    /**
+     * Pdf default document
+     */
+    private PDDocument pdf;
+
+    /**
+     * Pdf with watermark
+     */
+    private PDDocument pdfWatermark;
+
+    /**
+     * Pdf with password protection
+     */
+    private PDDocument pdfProtected;
+
+ 
+    /**
+     * Retrieve the output directory
+     * @return Path of the output directory
+     */
+    public String getOutputDir() {
+        return outputDir;
+    }
+
+    /**
+     * Store the output directory
+     * @param outputDir Output directory path
+     */
+    public void setOutputDir(String outputDir) {
+        this.outputDir = outputDir;
+    }    
+
+
+
+
+    /**
+     * Set the PDF document (default transformation without option - i.e. watermark and password protection)
+     * @param pdf Default Pdf document
+     */
+    public void setPdf(PDDocument pdf){
+        this.pdf = pdf;
+    }
+
+    /**
+     * Get the default Pdf
+     * @return Default Pdf
+     */
+    public PDDocument getPdf(){
+        return this.pdf;
+    }
+
+    /**
+     * Get the Pdf with Watermark
+     * @return Pdf with Watermark
+     */
+    public PDDocument getWatermarkPdf(){
+        return this.pdfWatermark;
+    }
+
+    /**
+     * Get the Pdf protected by password
+     * @return Pdf protected by password
+     */
+    public PDDocument getProtectedPdf(){
+        return this.pdfProtected;
+    }
+
+    /**
+     * Set the PDF document with Watermark
+     * @param pdfWatermark Pdf document with watermark
+     */
+    public void setWatermarkPdf(PDDocument pdfWatermark){
+        this.pdfWatermark = pdfWatermark;
+    }
+
+    /**
+     * Set the PDF document protected by password
+     * @param pdfProtected Pdf document with password protection
+     */
+    public void setProtectedPdf(PDDocument pdfProtected){
+        this.pdfProtected = pdfProtected;
+    }
 
     /**
      * Store the Jsoup Document object
      * @param doc Jsoup document
      */
     public void setDocument(Document doc){
-        this.doc = doc;
+        this.html = doc;
     }
 
     /**
@@ -43,7 +135,7 @@ public class PublicationPdf implements Publication{
      * @return Jsoup Document object
      */
     public Document getDocument(){
-        return doc;
+        return html;
     }
 
 
@@ -52,6 +144,6 @@ public class PublicationPdf implements Publication{
      * @return String content of the Jsoup Document
      */
     public String html() {
-        return doc.html();
+        return html.html();
     }    
 }

@@ -34,64 +34,76 @@ public class PublisherDefaultHtmlBean implements PublisherBean {
     }
 
     /**
-     * [Optional] List of CSS. Just set the path to the CSS scripts
+     * [Optional value]<br>
+     * List of CSS. Just set the path to the CSS scripts
      */
     private List<String> css;
 
     /**
-     * [Optional] List of Javascripts. Just set the path of the Javascript scripts.
+     * [Optional value]<br>
+     * List of Javascripts. Just set the path of the Javascript scripts.
      */
     private List<String> js;
 
 
     /**
-     * [Optional] Description to add the {@code <meta>} tag with attribute name="description" in HTML {@code <header>}
+     * [Optional value]<br>
+     * Description to add the {@code <meta>} tag with attribute name="description" in HTML {@code <header>}
      */
     private String metaDescription = null;
 
     /**
-     * [Optional] List of keywords to add the {@code <meta>} tag with attribute name="keywords" in HTML {@code <header>}
+     * [Optional value]<br>
+     * List of keywords to add the {@code <meta>} tag with attribute name="keywords" in HTML {@code <header>}
      */
     private String metaKeywords = null;
 
     /**
-     * [Optional] Author to add to the {@code <meta>} tag with attribute name="author" in HTML {@code <header>}
+     * [Optional value]<br>
+     * Author to add to the {@code <meta>} tag with attribute name="author" in HTML {@code <header>}
      */
     private String metaAuthor = null;
 
 
     /**
-     * [Optional] Icon to add to HTML header in {@code <Link>} tag
+     * [Optional value]<br>
+     * Icon to add to HTML header in {@code <Link>} tag
      */
     private String metaIcon = null;
 
     /**
-     * [Mandatory] Markdown file content
+     * [Mandatory value]<br>
+     * Markdown file content
      */
     private String markdown = null;
 
     /**
-     * [Optional] Template file content
+     * [Optional value]<br>
+     * Template file content
      */
     private String template = null;
 
     /**
-     * [Optional] Path to the title image
+     * [Optional value]<br>
+     * Path to the title image
      */
     private String titleImg = null;
 
     /**
-     * [Optional] Text to add to {@code <title>} tag
+     * [Optional value]<br>
+     * Text to add to {@code <title>} tag
      */
     private String titleTxt = null;
 
     /**
-     * [Optional] Text to set the author of the publication
+     * [Optional value]<br>
+     * Text to set the author of the publication
      */
     private String author = null;
 
     /**
-     * [Optional] Text to set the date of the publication
+     * [Optional value]<br>
+     * Text to set the date of the publication
      */
     private String date = null;
 

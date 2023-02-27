@@ -30,6 +30,7 @@ public class PublicationHtml implements Publication {
     public PublicationHtml(){
         /* Default constructor */
     }
+    
     /**
      * Jsoup Document object = Abstract instance of the HTML document using Jsoup library
      */

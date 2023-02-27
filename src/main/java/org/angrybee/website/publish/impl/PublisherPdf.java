@@ -16,7 +16,6 @@ limitations under the License.
 package org.angrybee.website.publish.impl;
 
 import java.util.ResourceBundle;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.File;
@@ -27,7 +26,7 @@ import java.net.URISyntaxException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Time;
+import java.nio.file.Paths;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
@@ -57,12 +56,56 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 
 /**
- * By default, resources (images,...) attached to the Markdown file to export to the PDF should be in the same folder than the MArkdown file. If not, you 
- * must specify the resources locations 
+ * This class is dedicated to the Markdown to PDF conversion.
+ * The process uses the temporary HTML/CSS format to define the style of the PDF target:<br>
+ * Markdown -> (JSoup) -> HTML+CSS -> (PDFBox) -> PDF
+ * 
+ * 3 PDF outputs are produced:
+ * 
+ * <ul>
+ *  <li>Default PDF: pure HTML+CSS conversion to PDF using PDFBox</li>
+ *  <li>Watermaked PDF: HTML+CSS conversion to PDF with watermark of your choice at each page</li> 
+ *  <li>Protected PDF: HTML+CSS conversion to PDF with password protection. This PDF is with or without watermark, depending if you choose to watermark 
+ * or not your PDF</li>
+ * </ul>
+ * If you choose to watermark your PDF, the process creates the 3 PDF files. If you choose not to watermark, you generate only 2 PDF files (default and protected).
+ * The protected PDF is always generated with "1234" paswword by default if you don't set Owner password AND User password (the 2 are required).
+ * <br>
+ * By default, resources (images,...) attached to the Markdown file to export to the PDF should be in the same folder than the Markdown file. If not, you 
+ * must specify the resources locations by overriding the default directory using <code>newWorkingDir</code> attribute and <code>setNewWorkingDir()</code> method.
+ * <p>The default code is:</p>
+ * <pre><code>
+ *         Path tempPath = null;
+ *       try {
+ *           tempPath = Files.createTempDirectory("publisher");
+ *       } catch (IOException e) {
+ *           logger.log(Level.SEVERE, e.getMessage(), e);
+ *       }
+ *
+ *</code></pre>
+ * <p>It creates a "publisher" prefix directory in temporary directory to write PDF files.</p> 
+ * <br>
+ * <p>Example of {@link PublisherPdf} usage:</p>
+ * <pre><code>
+ *  	 PublisherPdfBean pDefaultBean = new PublisherPdfBean();
+ *       pDefaultBean.setTitleTxt("Template PDF Formatting article");
+ *       pDefaultBean.setWatermark("Watermark!!!");
+ *       pDefaultBean.setAuthor("Charles Vissol");
+ *       pDefaultBean.setDate("February 20, 2023");
+ *       pDefaultBean.setHeader("Header of the page");
+ *       pDefaultBean.setFooter("This is a very long footer of page...");
+ *       
+ *       pDefaultBean.setMarkdown("my-article.md");
+ *       
+ *       PublisherPdf pDefault = new PublisherPdf();
+ *       pDefault.setBean(pDefaultBean);
+ *       
+ *       PublicationPdf pdfResult = (PublicationPdf) pDefault.publish();
+ * 
+ * </code></pre>
  * 
  * @author Charles Vissol
  */
-//TODO Comment the class and add code sample
 public class PublisherPdf implements Publisher{
 
 	/**
@@ -78,7 +121,15 @@ public class PublisherPdf implements Publisher{
 	/**
 	 * Default bean implementation
 	 */
-	private PublisherPdfBean publisherBeanImpl;
+	private PublisherPdfBean publisherBeanImpl = null;
+
+    /**
+     * String representing the new working directory to
+     * override the default one 
+     * 
+     */
+    private String newWorkingDir = null;
+
 
 
     @Override
@@ -91,7 +142,8 @@ public class PublisherPdf implements Publisher{
     public Publication publish() {
 
 
-    
+        PublicationPdf publication = new PublicationPdf();
+
 
 
         File fileTemplate = null;
@@ -193,7 +245,6 @@ public class PublisherPdf implements Publisher{
         /**
          * Create the table of content for the first 3 titles
          */
-
         Elements headers = doc.select("h1, h2, h3");
 
         org.jsoup.nodes.Element toc = HTMLUtils.id(doc, "doc.toc");
@@ -216,17 +267,34 @@ public class PublisherPdf implements Publisher{
             tocIndex++;
         }
 
-        
-		PublicationHtml htmlPub = new PublicationHtml();
-		htmlPub.setDocument(doc);
+        publication.setDocument(doc);
 
-
+        /**
+         * Create the working directory
+         */
         Path tempPath = null;
-        try {
-            tempPath = Files.createTempDirectory("publisher");
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
+        if(this.newWorkingDir != null){
+            //Override the default working directory
+            tempPath = Paths.get(this.newWorkingDir);
+            //Creates the working directory to be sure it exists
+            try {
+                Files.createDirectory(tempPath);
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage(), e);
+            }
+        } else {
+            //By default creates the working directory
+            try {
+                tempPath = Files.createTempDirectory("publisher");
+                logger.log(Level.INFO, "Default working directory is: " + tempPath);
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage(), e);
+            }    
         }
+
+
+
+
 
 
         String PATH_HTML = tempPath + File.separator + "publish-pdf-input.html";
@@ -254,7 +322,7 @@ public class PublisherPdf implements Publisher{
 
 
         /**
-         * Create the PDF
+         * Create the base PDF
          */
         try {
             this.htmlToPdf(PATH_HTML, PATH_PDF, baseUri);
@@ -262,13 +330,18 @@ public class PublisherPdf implements Publisher{
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
+        try {
+            publication.setPdf(PDDocument.load(new File(PATH_PDF)));
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
         /**
          * Create watermark to each page
          */
         String PATH_PDF_WATERMARK = null;
         if(publisherBeanImpl.getWatermark() != null){
-            PATH_PDF_WATERMARK = tempPath + File.separator + mdFile.getName() + "_watermark.pdf";
+            PATH_PDF_WATERMARK = tempPath + File.separator + mdFile.getName() + ".watermark.pdf";
             
             File srcFile = new File(PATH_PDF);
             File dstFile = new File(PATH_PDF_WATERMARK);
@@ -286,15 +359,23 @@ public class PublisherPdf implements Publisher{
             }            
         }
 
+        try {
+            publication.setWatermarkPdf(PDDocument.load(new File(PATH_PDF_WATERMARK)));
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
         /**
          * Secure PDF with password
          */
-        String PATH_PDF_PROTECTED = null;
+        String PATH_PDF_IN_PROTECTED = null;
+        String PATH_PDF_OUT_PROTECTED = null;
         if(publisherBeanImpl.getWatermark() != null){
-            PATH_PDF_PROTECTED = PATH_PDF_WATERMARK;
+            PATH_PDF_IN_PROTECTED = PATH_PDF_WATERMARK;
+            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".watermark.protected.pdf";;
         } else {
-            PATH_PDF_PROTECTED = PATH_PDF;
+            PATH_PDF_IN_PROTECTED = PATH_PDF;
+            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".protected.pdf";;
         }
 
         /**
@@ -307,13 +388,14 @@ public class PublisherPdf implements Publisher{
             ownerPassword = publisherBeanImpl.getOwnerPassword();
             userPassword = publisherBeanImpl.getUserPassword();
         } else {
+            logger.log(Level.INFO, "Passwords not defined. Default owner and user passwords are '1234' value");
             ownerPassword = "1234";
+            publisherBeanImpl.setOwnerPassword("1234");
             userPassword = "1234";
+            publisherBeanImpl.setUserPassword("1234");
         }
 
-
-
-        File srcFile = new File(PATH_PDF_PROTECTED);
+        File srcFile = new File(PATH_PDF_IN_PROTECTED);
         PDDocument permissionPdf = null;
         
         try 
@@ -335,7 +417,7 @@ public class PublisherPdf implements Publisher{
 
             permissionPdf.protect(spp);
                      
-            permissionPdf.save(PATH_PDF_PROTECTED);
+            permissionPdf.save(PATH_PDF_OUT_PROTECTED);
             permissionPdf.close();
 
 
@@ -343,35 +425,31 @@ public class PublisherPdf implements Publisher{
             logger.log(Level.SEVERE, e.getMessage(), e);
         } 
 
+        try {
+            publication.setProtectedPdf(PDDocument.load(new File(PATH_PDF_OUT_PROTECTED), userPassword));
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        //Store the output directory
+        if(tempPath !=null)
+            publication.setOutputDir(tempPath.toUri().getPath());
+
+
+
         //Delete HTML template file
         new File(PATH_HTML).delete();
 
-
-        //TODO
-        return null;
-    }
-    
-    public static void main(String[] args) {
-
-
-       
-		PublisherPdfBean pDefaultBean = new PublisherPdfBean();
-        pDefaultBean.setTitleTxt("Template PDF Formatting article");
-        pDefaultBean.setWatermark("Watermark!!!");
-        pDefaultBean.setAuthor("Charles Vissol");
-        pDefaultBean.setDate("February 20, 2023");
-        pDefaultBean.setHeader("Header of the page");
-        pDefaultBean.setFooter("This is a very long footer of page ");
-        //pDefaultBean.setResources("/home/vissol/softs/dev-projects/angrybee-website/articles");
-        pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/angrybee-website/articles/cgroups.md");
-        //pDefaultBean.setMarkdown("/home/vissol/softs/dev-projects/website-publisher/src/test/resources/publish-pdf-input.md");
-       
-        
-        PublisherPdf pDefault = new PublisherPdf();
-        pDefault.setBean(pDefaultBean);
-        pDefault.publish();
+        return publication;
     }
 
+
+    /**
+     * Convert HTML into W3C compliant HTML content
+     * @param inputHTML Input HTML file
+     * @return {@link org.jsoup.nodes.Document} object
+     * @throws IOException If HTML does not exist
+     */
     private Document html5ParseDocument(String inputHTML) throws IOException{
         org.jsoup.nodes.Document doc;
         
@@ -381,7 +459,21 @@ public class PublisherPdf implements Publisher{
     }
 
 
+    /**
+     * Override the default working directory
+     * @param newWorkingDirectory New working directory path
+     */
+    public void setNewWorkingDir(String newWorkingDirectory){
+        this.newWorkingDir = newWorkingDirectory;
+    }
 
+    /**
+     * Convert HTML input into PDF output
+     * @param inputHTML Path of the input HTML file
+     * @param outputPdf Path of the output PDF file
+     * @param baseUri URI of the resources used by the HTML file (ex: pictures...)
+     * @throws IOException Exception if files do not exist
+     */
     private void htmlToPdf(String inputHTML, String outputPdf, String baseUri) throws IOException {
         
         Document doc = this.html5ParseDocument(inputHTML);
@@ -401,11 +493,6 @@ public class PublisherPdf implements Publisher{
         
         os.close();
       }
-
-
-
-
-
 
 
 }
