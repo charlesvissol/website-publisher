@@ -147,10 +147,7 @@ public class PublisherPdf implements Publisher{
 
         PublicationPdf publication = new PublicationPdf();
 
-
-
         File fileTemplate = null;
-        //File fileFont = null;
 
 		//Load template HTML file: default template if not in the Bean
         if(publisherBeanImpl.getTemplate() != null){
@@ -160,12 +157,10 @@ public class PublisherPdf implements Publisher{
         } else {
 
 			//Get the default html template if the PublisherDefaultHtmlBean.getTemplate() is empty
-			String template = resources.getString("template");	
-            //String font = resources.getString("font"); 
+			String template = resources.getString("template");	 
 
 			try {
 				fileTemplate = new FileUtils().getFileFromResource(template);
-                //fileFont = new FileUtils().getFileFromResource(font);
 
 			} catch (URISyntaxException e) {
 				logger.log(Level.SEVERE, e.getMessage(), e);
@@ -289,7 +284,7 @@ public class PublisherPdf implements Publisher{
             //By default creates the working directory
             try {
                 tempPath = Files.createTempDirectory("publisher");
-                logger.log(Level.INFO, "Default working directory is: " + tempPath);
+                logger.log(Level.INFO, "Default working directory is: {0}", tempPath);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);
             }    
@@ -318,8 +313,6 @@ public class PublisherPdf implements Publisher{
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
-        //Get font
-        //FileUtils.duplicate(fileFont.getPath(), PATH_RESOURCES + File.separator + fileFont.getName());
 
         String baseUri = FileSystems.getDefault().getPath(PATH_RESOURCES).toUri().toString();
 
@@ -375,10 +368,10 @@ public class PublisherPdf implements Publisher{
         String PATH_PDF_OUT_PROTECTED = null;
         if(publisherBeanImpl.getWatermark() != null){
             PATH_PDF_IN_PROTECTED = PATH_PDF_WATERMARK;
-            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".watermark.protected.pdf";;
+            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".watermark.protected.pdf";
         } else {
             PATH_PDF_IN_PROTECTED = PATH_PDF;
-            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".protected.pdf";;
+            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".protected.pdf";
         }
 
         /**
@@ -414,10 +407,6 @@ public class PublisherPdf implements Publisher{
         if(tempPath !=null)
             publication.setOutputDir(tempPath.toUri().getPath());
 
-
-
-        //Delete HTML template file
-        new File(PATH_HTML).delete();
 
         return publication;
     }

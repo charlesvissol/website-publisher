@@ -1,6 +1,6 @@
 package org.angrybee.website.publish.impl;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -42,11 +42,11 @@ public class PublisherPdfTest {
 
         System.out.println(pdfResult.getOutputDir());
 
-        assertTrue(pdfResult.getDocument() != null);
-        assertTrue(pdfResult.getOutputDir()!= null);
-        assertTrue(pdfResult.getPdf() != null);
-        assertTrue(pdfResult.getWatermarkPdf() != null);
-        assertTrue(pdfResult.getProtectedPdf() != null);
+        assertNotNull(pdfResult.getDocument());
+        assertNotNull(pdfResult.getOutputDir());
+        assertNotNull(pdfResult.getPdf());
+        assertNotNull(pdfResult.getWatermarkPdf());
+        assertNotNull(pdfResult.getProtectedPdf());
 
         
     }
