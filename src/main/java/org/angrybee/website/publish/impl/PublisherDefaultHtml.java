@@ -88,6 +88,7 @@ public class PublisherDefaultHtml implements Publisher {
 	 * Default constructor
 	 */
 	public PublisherDefaultHtml(){
+	
 		/* Default constructor */
 	}
 
