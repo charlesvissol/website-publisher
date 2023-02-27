@@ -19,7 +19,13 @@ import org.angrybee.website.publish.Publication;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.jsoup.nodes.Document;
 
+/**
+ * Representation of any PDF file 
+ * 
+ * @author Charles Vissol
+ */
 public class PublicationPdf implements Publication{
+
    /**
      * Default constructor
      */
@@ -35,7 +41,7 @@ public class PublicationPdf implements Publication{
 
 
     /**
-     * Jsoup Document object = Abstract instance of the HTML document using Jsoup library
+     * Jsoup {@link org.jsoup.nodes.Document} object = Abstract instance of the HTML document using Jsoup library
      */
     private Document html;
 
@@ -123,7 +129,7 @@ public class PublicationPdf implements Publication{
     }
 
     /**
-     * Store the Jsoup Document object
+     * Store the Jsoup {@link org.jsoup.nodes.Document} object
      * @param doc Jsoup document
      */
     public void setDocument(Document doc){
@@ -131,7 +137,7 @@ public class PublicationPdf implements Publication{
     }
 
     /**
-     * Get the Jsoup Document object
+     * Get the Jsoup {@link org.jsoup.nodes.Document} object
      * @return Jsoup Document object
      */
     public Document getDocument(){

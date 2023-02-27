@@ -20,6 +20,7 @@ import org.jsoup.nodes.Document;
 
 /**
  * Representation of any HTML output document
+ * 
  * @author Charles Vissol
  */
 public class PublicationHtml implements Publication {
@@ -32,12 +33,12 @@ public class PublicationHtml implements Publication {
     }
     
     /**
-     * Jsoup Document object = Abstract instance of the HTML document using Jsoup library
+     * {@link org.jsoup.nodes.Document} object = Abstract instance of the HTML document using Jsoup library
      */
     private Document doc;
 
     /**
-     * Store the Jsoup Document object
+     * Store the Jsoup {@link org.jsoup.nodes.Document} object
      * @param doc Jsoup document
      */
     public void setDocument(Document doc){
@@ -45,7 +46,7 @@ public class PublicationHtml implements Publication {
     }
 
     /**
-     * Get the Jsoup Document object
+     * Get the Jsoup {@link org.jsoup.nodes.Document} object
      * @return Jsoup Document object
      */
     public Document getDocument(){
@@ -54,7 +55,7 @@ public class PublicationHtml implements Publication {
 
 
     /**
-     * Return the String content of a Jsoup Document
+     * Return the String content of a Jsoup {@link org.jsoup.nodes.Document}
      * @return String content of the Jsoup Document
      */
     public String html() {

@@ -33,9 +33,37 @@ import org.jsoup.nodes.Element;
 
 /**
  * {@link org.angrybee.website.publish.Publisher} implementation for generic HTML.
- * It allows conversion of Markdown into HTML
- * this class uses {@link org.angrybee.website.publish.bean.PublisherDefaultHtmlBean} to manage variables and
+ * It allows conversion of Markdown into any HTML
+ * This class uses {@link org.angrybee.website.publish.bean.PublisherDefaultHtmlBean} to manage variables and
  * {@link org.angrybee.website.publish.impl.PublicationHtml} allows you to get the resulting publication.
+ * 
+ * <p><img alt="PublisherDefaultHtml principles" src="doc-files/PublisherDefaultHtml.png"/></p>
+ * 
+ * 
+ * <p>Example of usage:</p>
+ * <pre><code>
+ * 
+ * 		PublisherDefaultHtml pDefault = new PublisherDefaultHtml();
+ *		PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
+ *
+ *		try {
+ *           pDefaultBean.setMarkdown(FileUtils.getStrContent(new FileUtils().getFileFromResource("publish-markdown-input.md")));
+ *       } catch (URISyntaxException e) {
+ *           e.printStackTrace();
+ *       }
+ *		pDefaultBean.setAuthor("Charles Vissol");
+ *      pDefaultBean.setMetaAuthor("Charles Vissol");
+ *		pDefaultBean.setDate("February 13, 2023");
+ *		pDefaultBean.setTitleImg("Linux_1_intro_terminal.png");
+ *		pDefaultBean.setMetaDescription("Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal");
+ *		pDefaultBean.setMetaKeywords("Linux terminal shortcut command basics introduction");
+ *		pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");
+ *		pDefaultBean.setTitleTxt("Linux Basics: Terminal survivor kit");
+ *
+ *		pDefault.setBean(pDefaultBean);
+ *		PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
+ * 
+ * </pre></code>
  * 
  * @author Charles Vissol
  */

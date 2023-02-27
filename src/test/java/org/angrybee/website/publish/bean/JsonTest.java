@@ -81,9 +81,9 @@ public class JsonTest {
 
         System.out.println("Write file to " + System.getProperty("java.io.tmpdir") + "/publisher.json");
 
-        System.out.println(FileUtils.getStrContent(new File(System.getProperty("java.io.tmpdir") + "/publisher.json")));
-
         Json.write(System.getProperty("java.io.tmpdir") + "/publisher.json", bean);
+
+        System.out.println(FileUtils.getStrContent(new File(System.getProperty("java.io.tmpdir") + "/publisher.json")));
 
         assertTrue(true);
 

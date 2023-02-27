@@ -38,6 +38,7 @@ public class Json {
      * Private consructor to avoid instantiation
      */
     private Json(){}
+    
 	/**
 	 * Logger initialization
 	 */

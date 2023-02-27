@@ -1,7 +1,5 @@
 ![](titles/cgroups.png)
 
-
-
 This book tries to explain in details the cgroup (control group) design. 
 
 Because Debian is a `systemd` operating system, we describe `systemd` combined with cgroup.

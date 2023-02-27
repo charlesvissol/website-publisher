@@ -37,14 +37,37 @@ import org.apache.pdfbox.util.Matrix;
  * diagonal watermark text to each page of a PDF
  * this code is provided by PDFBox project <a href="https://svn.apache.org/viewvc/pdfbox/trunk/examples/src/main/java/org/apache/pdfbox/examples/util/AddWatermarkText.java?revision=1871629&view=co">here</a>.
  * 
+ * <br>
+ * You can directly call this class to add a watermark to each page of your PDF.
+ * Simply call:
+ * <pre><code>
+ * 
+ *      java org.angrybee.website.publish.utils.PDFWatermarkUtils $input-pdf $output-pdf $watermark-text
+ * 
+ * </code></pre>
+ * <ul>
+ * <li><code>$input-pdf</code>: Input PDF file (without watermark)</li>
+ * <li><code>$output-pdf</code>: Output PDF file (with watermark)</li>
+ * <li><code>$watermark-text</code>: Text od the watermark to include in each page</li>
+ * </ul>
+ * 
+ * 
  * @author Charles Vissol
  */
 public class PDFWatermarkUtils {
     
+    /**
+     * Default private constructor to avoid direct instantiation
+     */
     private PDFWatermarkUtils(){
         
     }
 
+    /**
+     * <code>main()</code> method to call direclty the watermark feature on an existing PDF.
+     * @param args The method accept 3 mandatory arguments: {@code <input-pdf>} {@code <output-pdf>} {@code <short text>}
+     * @throws IOException If input file does not exist or if output file can't be written
+     */
     public static void main(String[] args) throws IOException
     {
         if (args.length != 3)
@@ -69,6 +92,14 @@ public class PDFWatermarkUtils {
         }
     }
 
+    /**
+     * Method to add watermark to all the pages of the PDF
+     * @param doc PDF document to modify
+     * @param page Page of the PDF
+     * @param font Font of the watermark
+     * @param text Text of the watermark
+     * @throws IOException If PDF not accessible, exception...
+     */
     public static void addWatermarkText(PDDocument doc, PDPage page, PDFont font, String text)
             throws IOException
     {

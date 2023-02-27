@@ -43,12 +43,11 @@ import org.angrybee.website.publish.bean.PublisherPdfBean;
 import org.angrybee.website.publish.utils.FileUtils;
 import org.angrybee.website.publish.utils.HTMLUtils;
 import org.angrybee.website.publish.utils.Md2Html;
+import org.angrybee.website.publish.utils.PDFProtectUtils;
 import org.angrybee.website.publish.utils.PDFWatermarkUtils;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
-import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
@@ -73,6 +72,10 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
  * <br>
  * By default, resources (images,...) attached to the Markdown file to export to the PDF should be in the same folder than the Markdown file. If not, you 
  * must specify the resources locations by overriding the default directory using <code>newWorkingDir</code> attribute and <code>setNewWorkingDir()</code> method.
+ * 
+ * <p><img alt="PublisherPdf principles" src="doc-files/PublisherPdf.png"/></p>
+ * 
+ * 
  * <p>The default code is:</p>
  * <pre><code>
  *         Path tempPath = null;
@@ -348,10 +351,10 @@ public class PublisherPdf implements Publisher{
 
             try (PDDocument watermarkPdf = PDDocument.load(srcFile))
             {
-                for (PDPage page : watermarkPdf.getPages())
+                for (PDPage page : watermarkPdf.getPages())//Add watermark to each page
                 {
-                    PDFont font = PDType1Font.HELVETICA;
-                    PDFWatermarkUtils.addWatermarkText(watermarkPdf, page, font, publisherBeanImpl.getWatermark());
+                    PDFont font = PDType1Font.HELVETICA;//Specify the Font
+                    PDFWatermarkUtils.addWatermarkText(watermarkPdf, page, font, publisherBeanImpl.getWatermark());//Add Watermark page by page
                 }
                 watermarkPdf.save(dstFile);
             } catch (IOException e) {
@@ -395,35 +398,11 @@ public class PublisherPdf implements Publisher{
             publisherBeanImpl.setUserPassword("1234");
         }
 
-        File srcFile = new File(PATH_PDF_IN_PROTECTED);
-        PDDocument permissionPdf = null;
-        
-        try 
-        {
-            
-            
-            permissionPdf = PDDocument.load(srcFile);
-            AccessPermission ap = new AccessPermission();
-            
-            ap.setCanModify(false);
-            ap.setCanExtractContent(false);
-            ap.setCanPrint(false);
-            ap.setReadOnly();
+        /**
+         * Main process of PDF encryption
+         */
+        PDFProtectUtils.protect(PATH_PDF_IN_PROTECTED, PATH_PDF_OUT_PROTECTED, ownerPassword, userPassword);
 
-            StandardProtectionPolicy spp = new StandardProtectionPolicy(ownerPassword, userPassword, ap);
-
-            spp.setPermissions(ap);
-
-
-            permissionPdf.protect(spp);
-                     
-            permissionPdf.save(PATH_PDF_OUT_PROTECTED);
-            permissionPdf.close();
-
-
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        } 
 
         try {
             publication.setProtectedPdf(PDDocument.load(new File(PATH_PDF_OUT_PROTECTED), userPassword));

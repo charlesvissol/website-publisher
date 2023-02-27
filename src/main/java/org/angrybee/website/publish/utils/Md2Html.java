@@ -37,6 +37,17 @@ import java.util.logging.Logger;
  * Dedicated utility class to convert markdown into HTML
  * Source code downloaded from 
  * @see <a href="https://simplesolution.dev/java-convert-markdown-to-html-using-flexmark-java">https://simplesolution.dev/java-convert-markdown-to-html-using-flexmark-java</a>.
+ * <br>
+ * You can call directly this class to convert Markdown into HTML:
+ * <pre><code>
+ * 
+ *      java org.angrybee.website.publish.utils.Md2Html $input-markdown $output-html
+ * 
+ * </code></pre>
+ * <ul>
+ *  <li><code>$input-markdown</code>: Input Markdown file</li>
+ *  <li><code>$output-html</code>: Output HTML file</li> 
+ * </ul>
  * 
  * @author Charles Vissol
  *
@@ -49,9 +60,26 @@ public final class Md2Html {
 	static final Logger logger = Logger.getLogger(Md2Html.class.getName());
 
     /**
-     * Public constructor empty because it has only static methods
+     * Private constructor empty because it has only static methods
      */
     private Md2Html(){ /* Empty constructor */ }
+
+
+    /**
+     * <code>main()</code> method to convert directly a Markdown file into HTML file.
+     * @param args The method accept 2 mandatory arguments: {@code <input-md>} {@code <output-html>}
+     */
+    public static void main(String[] args) {
+        if (args.length != 2)
+        {
+            usage();
+        }
+        else
+        {
+            Md2Html.convert(args[0], args[1]);
+        }        
+    }
+
 
 
 	/**
@@ -61,8 +89,8 @@ public final class Md2Html {
 	 */
     public static String convert(String markdownContent) {
     	
-    	logger.fine("Entry into method convertMarkdownToHtml(String)");
-        logger.fine(() -> String.format("Input Markdown content is %s", markdownContent));
+    	logger.log(Level.FINE, "Entry into method convertMarkdownToHtml(String)");
+        logger.log(Level.FINE, () -> String.format("Input Markdown content is %s", markdownContent));
         
     	MutableDataSet options = new MutableDataSet();
 
@@ -106,4 +134,14 @@ public final class Md2Html {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
+
+    /**
+     * This will print the usage.
+     */
+    private static void usage()
+    {
+        System.err.println("Usage: java " + Md2Html.class.getName() + " <input-md> <output-html>");
+    }
+
+
 }

@@ -244,7 +244,6 @@ public class PublisherAngrybee implements Publisher {
 
 		return htmlPub;
 
-
 	}
 
 

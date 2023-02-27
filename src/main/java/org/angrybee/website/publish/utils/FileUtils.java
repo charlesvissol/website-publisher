@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 
 /**
  * Utility class to manage files
+ * 
  * @author Charles Vissol
  */
 public class FileUtils {
