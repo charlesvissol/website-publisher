@@ -40,7 +40,9 @@ public class PublisherPdfTest {
 
         PublicationPdf pdfResult = (PublicationPdf) pDefault.publish();
 
-        System.out.println(pdfResult.getOutputDir());
+        System.out.println("Result directory: " + pdfResult.getOutputDir());
+        System.out.println("Owner password: " + pDefaultBean.getOwnerPassword());
+        System.out.println("User password: " + pDefaultBean.getUserPassword());
 
         assertNotNull(pdfResult.getDocument());
         assertNotNull(pdfResult.getOutputDir());

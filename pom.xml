@@ -88,8 +88,8 @@
 							<outputDirectory>${basedir}/target/classes/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${basedir}/src/</directory>
-									
+									<directory>${basedir}/src/main/java/</directory>
+									<include>**/*.properties</include>
 								</resource>
 							</resources>
 						</configuration>

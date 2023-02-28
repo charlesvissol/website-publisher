@@ -45,7 +45,7 @@ import org.angrybee.website.publish.utils.HTMLUtils;
 import org.angrybee.website.publish.utils.Md2Html;
 import org.angrybee.website.publish.utils.PDFProtectUtils;
 import org.angrybee.website.publish.utils.PDFWatermarkUtils;
-
+import org.angrybee.website.publish.utils.PasswordGenerator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -390,10 +390,10 @@ public class PublisherPdf implements Publisher{
             userPassword = publisherBeanImpl.getUserPassword();
         } else {
             logger.log(Level.INFO, "Passwords not defined. Default owner and user passwords are '1234' value");
-            ownerPassword = "1234";
-            publisherBeanImpl.setOwnerPassword("1234");
-            userPassword = "1234";
-            publisherBeanImpl.setUserPassword("1234");
+            ownerPassword = PasswordGenerator.generatePassword(12);
+            publisherBeanImpl.setOwnerPassword(ownerPassword);
+            userPassword = PasswordGenerator.generatePassword(12);;
+            publisherBeanImpl.setUserPassword(userPassword);
         }
 
         /**
