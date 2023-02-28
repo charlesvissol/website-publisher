@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
 
-public class FileUtilsTest {
+class FileUtilsTest {
 
     static final Logger logger = Logger.getLogger(FileUtilsTest.class.getName());
 

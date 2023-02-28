@@ -25,7 +25,7 @@ import java.util.List;
 import org.angrybee.website.publish.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
-public class JsonTest {
+class JsonTest {
     @Test
     void testRead() {
 

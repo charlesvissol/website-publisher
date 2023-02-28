@@ -140,7 +140,7 @@ public final class Md2Html {
      */
     private static void usage()
     {
-        System.err.println("Usage: java " + Md2Html.class.getName() + " <input-md> <output-html>");
+        logger.log(Level.INFO, "Usage: java {0} <input-md> <output-html>", Md2Html.class.getName());
     }
 
 

@@ -58,6 +58,8 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
  * This class is dedicated to the Markdown to PDF conversion.
  * The process uses the temporary HTML/CSS format to define the style of the PDF target:<br>
  * Markdown -> (JSoup) -> HTML+CSS -> (PDFBox) -> PDF
+ * <br>
+ * This class requires a working directory !!<br>
  * 
  * 3 PDF outputs are produced:
  * 
@@ -260,7 +262,7 @@ public class PublisherPdf implements Publisher{
 
             org.jsoup.nodes.Element div = new Element("div").addClass("toc-row");
             org.jsoup.nodes.Element a = new Element("a");
-            a.attr("href", "#" + String.valueOf(tocIndex));
+            a.attr("href", "#" + tocIndex);
             a.attr("style", "text-decoration: none;");
             a.text(header.text());
             div.appendChild(a);
@@ -392,7 +394,7 @@ public class PublisherPdf implements Publisher{
             logger.log(Level.INFO, "Passwords not defined. Default owner and user passwords are '1234' value");
             ownerPassword = PasswordGenerator.generatePassword(12);
             publisherBeanImpl.setOwnerPassword(ownerPassword);
-            userPassword = PasswordGenerator.generatePassword(12);;
+            userPassword = PasswordGenerator.generatePassword(12);
             publisherBeanImpl.setUserPassword(userPassword);
         }
 

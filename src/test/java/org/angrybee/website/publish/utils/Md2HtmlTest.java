@@ -14,6 +14,7 @@
 */
 
 package org.angrybee.website.publish.utils;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 // ! Important to use jupiter API for assertion because it is specific to Junit 5
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -47,7 +48,7 @@ class Md2HtmlTest {
 		logger.info(Md2Html.convert(proceed).trim());
 
 		//Verify the transformation from Markdown to HTML 
-		assertTrue(expected.equals(Md2Html.convert(proceed).trim()));
+		assertEquals(expected, Md2Html.convert(proceed).trim());
 		
 	}
 

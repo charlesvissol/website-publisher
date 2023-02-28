@@ -29,7 +29,7 @@ import org.angrybee.website.publish.bean.PublisherDefaultHtmlBean;
 import org.angrybee.website.publish.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
-public class PublisherAngrybeeTest {
+class PublisherAngrybeeTest {
     @Test
     void testPublish() {
 

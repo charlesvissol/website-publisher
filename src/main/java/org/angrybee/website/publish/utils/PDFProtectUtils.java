@@ -116,7 +116,7 @@ public class PDFProtectUtils {
      */
     private static void usage()
     {
-        System.err.println("Usage: java " + PDFProtectUtils.class.getName() + " <input-pdf> <output-pdf> <owner password> <user password>");
+        logger.log(Level.INFO, "Usage: java {0} <input-pdf> <output-pdf> <owner password> <user password>", PDFProtectUtils.class.getName());
     }
 
 

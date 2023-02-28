@@ -9,7 +9,7 @@ import org.angrybee.website.publish.bean.PublisherPdfBean;
 import org.angrybee.website.publish.utils.FileUtils;
 import org.junit.jupiter.api.Test;
 
-public class PublisherPdfTest {
+class PublisherPdfTest {
     @Test
     void testPublish() {
 

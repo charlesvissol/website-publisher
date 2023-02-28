@@ -16,6 +16,8 @@ package org.angrybee.website.publish.utils;
 
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class to generate random password
@@ -24,6 +26,12 @@ import java.util.Random;
  * @author ChatGPT & Charles Vissol
  */
 public class PasswordGenerator {
+
+    /**
+     * Logger for Md2Html
+     */
+	static final Logger logger = Logger.getLogger(PasswordGenerator.class.getName());
+
 
     private static final Random RANDOM = new SecureRandom();
 
@@ -42,9 +50,17 @@ public class PasswordGenerator {
      * @param args {@code <integer>} Lenght of the generated password
      */
     public static void main(String... args) {
+        if (args.length != 1)
+        {
+            usage();
+        }
+        else
+        {
+            String password = generatePassword(Integer.valueOf(args[0]));
+            logger.log(Level.INFO, "Password: {0}", password);
+        }        
         
-        String password = generatePassword(Integer.valueOf(args[0]));
-        System.out.println("Password: " + password);
+
     }
 
     /**
@@ -82,5 +98,14 @@ public class PasswordGenerator {
         }
         return new String(charArray);
     }
+
+    /**
+     * This will print the usage.
+     */
+    private static void usage()
+    {
+        logger.log(Level.INFO, "Usage: java {0} <integer>", PasswordGenerator.class.getName());
+    }
+
 }
 

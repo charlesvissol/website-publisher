@@ -79,12 +79,10 @@ public class Json {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File(jsonPath), bean);
 
             
-        } catch (StreamWriteException|DatabindException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-            
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+            
+        } 
 
     }
 
