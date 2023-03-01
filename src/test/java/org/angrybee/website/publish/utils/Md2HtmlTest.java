@@ -35,6 +35,33 @@ class Md2HtmlTest {
 	static final Logger logger = Logger.getLogger(Md2HtmlTest.class.getName());
 
 
+	@Test
+	void testMain(){
+
+		ClassLoader classLoader = getClass().getClassLoader();
+		File fileTemplate = new File(classLoader.getResource("template.md").getFile());
+
+
+		String[] args = {fileTemplate.toPath().toString(), System.getProperty("java.io.tmpdir") + File.separator + "template.html"};
+
+		Md2Html.main(args);
+
+		File resultExpected = new File(classLoader.getResource("template.html").getFile());		
+		File resultToCompare = new File(System.getProperty("java.io.tmpdir") + File.separator + "template.html");
+
+		List<String> resultListExpected = FileUtils.readLineByLine(resultExpected.toPath().toString());
+		List<String> resultListToCompare = FileUtils.readLineByLine(resultToCompare.toPath().toString());
+
+		//Read Line by line the result/expected file and verify if it is equals
+		for (int i = 0; i < resultListExpected.size(); i++) {
+			assertTrue(resultListExpected.get(i).equals(resultListToCompare.get(i)));
+			logger.info("Expected=" + resultListExpected.get(i) + "||" + resultListToCompare.get(i));
+		  }
+		
+
+	}
+
+
 	@ParameterizedTest
 	@CsvSource({
 	    "<h1>Some history</h1>, # Some history",
