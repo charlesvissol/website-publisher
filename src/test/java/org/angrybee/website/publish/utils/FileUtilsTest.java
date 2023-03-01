@@ -2,8 +2,11 @@ package org.angrybee.website.publish.utils;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
@@ -72,6 +75,29 @@ class FileUtilsTest {
 
 
     }
+
+
+    @Test
+    void testGetFileFromResource(){
+        
+        File markdown = null;
+        try {
+            markdown = new FileUtils().getFileFromResource("cgroups.md");
+        } catch (URISyntaxException e) {
+            
+            e.printStackTrace();
+        }
+
+        System.out.println(markdown.getAbsolutePath());
+        System.out.println(markdown.exists());
+        System.out.println(markdown.getName());
+
+        assertTrue("cgroups.md".equalsIgnoreCase(markdown.getName()));
+
+        assertTrue(markdown.exists());
+    }
+
+
 
 	/**
 	 * Return the class loader to get resources files
