@@ -33,6 +33,54 @@ class PDFWatermarkUtilsTest {
 	static final Logger logger = Logger.getLogger(PDFWatermarkUtilsTest.class.getName());
 
 
+
+    @Test
+    void testMain(){
+
+        File inputPdf = new File(this.getClass().getClassLoader().getResource("publish-pdf-input.pdf").getFile());
+
+        
+        /**
+         * Create the working directory
+         */
+        Path tempPath = null;
+        
+        //By default creates the working directory
+        try {
+
+            String prefix = "publisher";
+
+            if(SystemUtils.IS_OS_UNIX) {
+                FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
+                tempPath = Files.createTempDirectory(prefix, attr); // Compliant
+                }
+                else {
+                tempPath = Files.createTempDirectory("publisher");
+                }
+
+            System.out.println("Default working directory is: " + tempPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    
+
+        String outputPath = tempPath.toFile().getAbsolutePath() + File.separator + "publish-pdf-output.pdf";
+
+        String[] args = {inputPdf.getAbsolutePath(), tempPath.toFile().getAbsolutePath() + File.separator + "publish-pdf-output.pdf", "Watermark"};
+
+        try {
+            PDFWatermarkUtils.main(args);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        assertTrue(new File(outputPath).exists());
+
+
+    }
+
+
+
+
     @Test
     void testAddWatermarkText() {
         
