@@ -14,7 +14,8 @@ import java.util.Set;
 import org.apache.commons.lang.SystemUtils;
 import org.junit.jupiter.api.Test;
 
-public class PDFProtectUtilsTest {
+class PDFProtectUtilsTest {
+    
     @Test
     void testMain() {
 

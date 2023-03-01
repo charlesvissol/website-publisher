@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.Test;
 
-public class HTMLUtilsTest {
+class HTMLUtilsTest {
     @Test
     void testDoc() {
 
