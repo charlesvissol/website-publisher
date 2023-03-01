@@ -16,6 +16,7 @@ limitations under the License.
 package org.angrybee.website.publish.impl;
 
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.File;
@@ -27,6 +28,9 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 
 import org.jsoup.Jsoup;
 import org.jsoup.helper.W3CDom;
@@ -46,6 +50,7 @@ import org.angrybee.website.publish.utils.Md2Html;
 import org.angrybee.website.publish.utils.PDFProtectUtils;
 import org.angrybee.website.publish.utils.PDFWatermarkUtils;
 import org.angrybee.website.publish.utils.PasswordGenerator;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -290,7 +295,17 @@ public class PublisherPdf implements Publisher{
         } else {
             //By default creates the working directory
             try {
-                tempPath = Files.createTempDirectory("publisher");
+
+                String prefix = "publisher";
+
+                if(SystemUtils.IS_OS_UNIX) {
+                    FileAttribute<Set<PosixFilePermission>> attr = PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rwx------"));
+                    tempPath = Files.createTempDirectory(prefix, attr); // Compliant
+                  }
+                  else {
+                    tempPath = Files.createTempDirectory("publisher");
+                  }
+
                 logger.log(Level.INFO, "Default working directory is: {0}", tempPath);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);
