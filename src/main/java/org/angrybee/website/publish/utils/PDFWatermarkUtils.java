@@ -19,6 +19,9 @@ package org.angrybee.website.publish.utils;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -55,7 +58,12 @@ import org.apache.pdfbox.util.Matrix;
  * @author Charles Vissol
  */
 public class PDFWatermarkUtils {
-    
+
+	/**
+	 * Logger initialization
+	 */
+	static final Logger logger = Logger.getLogger(PDFWatermarkUtils.class.getName());    
+
     /**
      * Default private constructor to avoid direct instantiation
      */
@@ -140,6 +148,6 @@ public class PDFWatermarkUtils {
      */
     private static void usage()
     {
-        System.err.println("Usage: java " + PDFWatermarkUtils.class.getName() + " <input-pdf> <output-pdf> <short text>");
+        logger.log(Level.INFO, "Usage: java {0} <input-pdf> <output-pdf> <short text>", PDFWatermarkUtils.class.getName());
     }
 }
