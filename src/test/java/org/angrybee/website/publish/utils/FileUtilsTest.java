@@ -2,10 +2,12 @@ package org.angrybee.website.publish.utils;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
@@ -14,6 +16,19 @@ import org.junit.jupiter.api.Test;
 class FileUtilsTest {
 
     static final Logger logger = Logger.getLogger(FileUtilsTest.class.getName());
+
+
+
+    @Test
+    void testGetFileFromResourceAsStream(){
+
+        FileUtils fUtils = new FileUtils();
+        InputStream iStream = fUtils.getFileFromResourceAsStream("publish-pdf-input.pdf");
+
+        assertNotNull(iStream);
+
+    }
+
 
 
     /**
