@@ -1,2 +1,198 @@
 # website-publisher
-Specific Publisher application to convert Markdown to HTML file for angrybee.tech website
+
+`website-publisher` is a Java library to convert any Markdown content into: HTML or PDF.
+
+![](src/main/javadoc/org/angrybee/website/publish/doc-files/publish-html.png)
+
+# Markdown to HTML
+
+To convert Markdown to HTML, you must use:
+
+- `PublisherDefaultHtml` and its publish() method to process the conversion
+
+- `PublisherDefaultHtmlBean` to aggregate all the parameters, required or optional, to launch the conversion
+
+- `PublicationHtml` to store the result of the conversion process (here HTML file)
+
+- The library contains a **default HTML template** called `default-template.html` in `src/main/resources` but you can use your own called of by `PublisherDefaultHtmlBean` methods:
+  
+  - `setTemplate()` to add your own HTML template
+  
+  - `setCss()` to add your own CSS files references
+  
+  - `setJs()` to add your own Javascript files references
+
+See the following illustration:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherDefaultHtml.png)
+
+Here is an example of default usage. 
+
+>  NB: Javadoc contains detailed information and example of usage. Do not hesitate to check JUnit code also...
+
+
+
+```java
+//Initiliaze the Bean (to store parameters)
+PublisherDefaultHtml pDefault = new PublisherDefaultHtml();
+//Initialize the class performing the conversion
+PublisherDefaultHtmlBean pDefaultBean = new PublisherDefaultHtmlBean();
+
+//Load the Markdown to convert (Mandatory)
+try {
+     pDefaultBean.setMarkdown(FileUtils.getStrContent(new FileUtils().getFileFromResource("publish-markdown-input.md")));
+} catch (URISyntaxException e) {
+     e.printStackTrace();
+}
+//Add the additional information you want (only the Markdown is mandatory)
+pDefaultBean.setAuthor("Charles Vissol");//Option
+pDefaultBean.setDate("February 13, 2023");//Option
+pDefaultBean.setTitleTxt("Linux Basics: Terminal survivor kit");//Option
+pDefaultBean.setTitleImg("Linux_1_intro_terminal.png");//Option
+//Set information in meta tags
+pDefaultBean.setMetaAuthor("Charles Vissol");//Option
+pDefaultBean.setMetaDescription("Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal");//Option
+pDefaultBean.setMetaKeywords("Linux terminal shortcut command basics introduction");//Option
+pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");//Option
+ 
+//Add the Bean and all its parameters to the conversion process
+pDefault.setBean(pDefaultBean);
+//Execute the conversion and get the result
+PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
+//Displays HTML result as String
+System.out.println(htmlPub.html());
+```
+
+
+
+# Markdown to PDF
+
+To convert Markdown to PDF, you must use:
+
+- `PublisherPdf` and its publish() method to process the conversion
+
+- `PublisherPdfBean` to aggregate all the optional and required parameters to launch the conversion
+
+- `PublicationPdf` to store the result of the conversion process (here PDF files)
+
+- The library contains a default HTML template called `default-pdf-template.html` in `src/main/resources` but you can use your own called of by `PublisherPdfBean` method `setTemplate()`
+
+
+
+> NB: The conversion from Markdown to PDF uses an intermediate format in HTML and CSS to customize the style of the PDF. 
+
+
+
+See the following illustration:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherPdf.png)
+
+> NB: The conversion to PDF requires a working directoy contrary to HTML conversion which is full In-Memory process
+
+## Default PDF
+
+Here is an example of default PDF conversion:
+
+```java
+PublisherPdfBean pDefaultBean = new PublisherPdfBean();
+//Option: Creates the title of the PDF 
+pDefaultBean.setTitleTxt("Template PDF Formatting article");
+//Opetion: Sets the author and date of publication of the PDF
+pDefaultBean.setAuthor("Charles Vissol");
+pDefaultBean.setDate("February 20, 2023");
+//Option: Add header to each page
+pDefaultBean.setHeader("Header of the page");
+//Option: add footer to each page
+pDefaultBean.setFooter("This is a very long footer of page...");
+//Mandatory: Input file in Makdown
+pDefaultBean.setMarkdown("my-article.md");
+
+PublisherPdf pDefault = new PublisherPdf();
+pDefault.setBean(pDefaultBean);
+
+PublicationPdf pdfResult = (PublicationPdf) pDefault.publish();
+```
+
+- First page sample:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/FirstPagePdf.png)
+
+- Table of content page:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/TocPdf.png)
+
+- Page sample:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PagePdf.png)
+
+
+
+## PDF with watermark
+
+If you want to add a watermark to each page of the PDF, simply add the following code:
+
+```java
+pDefaultBean.setWatermark("Watermark!!!");
+```
+
+- Page with watermark sample:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/WatermarkPdf.png)
+
+## Encrypted PDF
+
+The encrypted PDF is always generated in addition to default PDF:
+
+- with default owner and user passwords automatically and randomly generated by the library if not set in `PublisherPdfBean` object by `setOwnerPassword()` and `setUserPassword()` methods
+
+- with specific owner and user passwords if set in `PublisherPdfBean` object by `setOwnerPassword()` and `setUserPassword()` methods
+
+
+
+# Templates
+
+- src/main/resources/default-template.html
+
+- src/main/resources/default-pdf-template.html
+
+- src/main/resources/angrybee-template.html
+
+
+
+
+
+# Dependencies
+
+The library uses a set of depencies as you can see in `pom.xml`.
+
+Mainly, it depends on:
+
+- `PDFBox`
+
+- `OpenHtmlToPdf`
+
+- `JSoup`
+
+- `Flexmark`
+
+- `Jackson`
+
+The pom.xml is designed to publish the full SBOM (Software Bill of Material) with `CycloneDx` and produces additional reports such as Code coverage or javadoc with syntax coloring.
+
+You can find all details in `pom.xml`.
+
+
+
+# Utility classes
+
+
+
+
+
+
+
+# The Angrybee publication process
+
+
+
+# How to extend

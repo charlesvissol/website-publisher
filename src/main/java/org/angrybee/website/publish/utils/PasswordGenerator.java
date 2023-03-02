@@ -23,7 +23,7 @@ import java.util.logging.Logger;
  * Utility class to generate random password
  * With the help of ChatGPT :-) but some refacoring to make it runnable
  * 
- * @author ChatGPT & Charles Vissol
+ * @author ChatGPT and Charles Vissol
  */
 public class PasswordGenerator {
 
