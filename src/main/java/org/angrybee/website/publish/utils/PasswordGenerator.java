@@ -22,6 +22,16 @@ import java.util.logging.Logger;
 /**
  * Utility class to generate random password
  * With the help of ChatGPT :-) but some refacoring to make it runnable
+ * You can call this class by command line:
+ * 
+ * <pre><code>
+ * 
+ *      java org.angrybee.website.publish.utils.PasswordGenerator $password-length
+ * 
+ * </code></pre>
+ * <ul>
+ *  <li><code>$password-length</code>: length of the password in integer</li>
+ * </ul>
  * 
  * @author ChatGPT and Charles Vissol
  */
