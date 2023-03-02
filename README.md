@@ -30,8 +30,6 @@ Here is an example of default usage.
 
 >  NB: Javadoc contains detailed information and example of usage. Do not hesitate to check JUnit code also...
 
-
-
 ```java
 //Initiliaze the Bean (to store parameters)
 PublisherDefaultHtml pDefault = new PublisherDefaultHtml();
@@ -54,7 +52,7 @@ pDefaultBean.setMetaAuthor("Charles Vissol");//Option
 pDefaultBean.setMetaDescription("Linux Basics article. Introduction to Linux basic shortcuts to know the minimum to use the Terminal");//Option
 pDefaultBean.setMetaKeywords("Linux terminal shortcut command basics introduction");//Option
 pDefaultBean.setMetaIcon("../pictures/angrybee-blue.svg");//Option
- 
+
 //Add the Bean and all its parameters to the conversion process
 pDefault.setBean(pDefaultBean);
 //Execute the conversion and get the result
@@ -62,8 +60,6 @@ PublicationHtml htmlPub = (PublicationHtml) pDefault.publish();
 //Displays HTML result as String
 System.out.println(htmlPub.html());
 ```
-
-
 
 # Markdown to PDF
 
@@ -77,11 +73,7 @@ To convert Markdown to PDF, you must use:
 
 - The library contains a default HTML template called `default-pdf-template.html` in `src/main/resources` but you can use your own called of by `PublisherPdfBean` method `setTemplate()`
 
-
-
 > NB: The conversion from Markdown to PDF uses an intermediate format in HTML and CSS to customize the style of the PDF. 
-
-
 
 See the following illustration:
 
@@ -113,19 +105,19 @@ pDefault.setBean(pDefaultBean);
 PublicationPdf pdfResult = (PublicationPdf) pDefault.publish();
 ```
 
-- First page sample:
+
+
+- First page sample result:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/FirstPagePdf.png)
 
-- Table of content page:
+- Table of content page result:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/TocPdf.png)
 
-- Page sample:
+- Page sample result:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PagePdf.png)
-
-
 
 ## PDF with watermark
 
@@ -135,7 +127,7 @@ If you want to add a watermark to each page of the PDF, simply add the following
 pDefaultBean.setWatermark("Watermark!!!");
 ```
 
-- Page with watermark sample:
+- Page with watermark sample result:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/WatermarkPdf.png)
 
@@ -147,19 +139,17 @@ The encrypted PDF is always generated in addition to default PDF:
 
 - with specific owner and user passwords if set in `PublisherPdfBean` object by `setOwnerPassword()` and `setUserPassword()` methods
 
-
-
 # Templates
 
-- src/main/resources/default-template.html
+By default the library contains several HTML and CSS templates to convert Markdown with a predefined style to HTML or PDF:
 
-- src/main/resources/default-pdf-template.html
+- `src/main/resources/default-template.html` is the default template to convert Markdwon to basic HTML
 
-- src/main/resources/angrybee-template.html
+- `src/main/resources/default-pdf-template.html` is the default template to convert Markdown to PDF (the intermediate format to produce PDF is an HTML file)
 
+- `src/main/resources/angrybee-template.html` is a specific template to produce https://angrybee.tech website pages.
 
-
-
+If you want, you can create your own template and call it using `setTemplate()` of the beans.
 
 # Dependencies
 
@@ -181,19 +171,78 @@ The pom.xml is designed to publish the full SBOM (Software Bill of Material) wit
 
 You can find all details in `pom.xml`.
 
-
-
 # Utility classes
 
+The library contains some utiliity classes you can call directly:
 
+- `Md2Html`: allows you to directly convert Markdown to HTML without style by calling:
 
+```bash
+java org.angrybee.website.publish.utils.Md2Html $input-markdown $output-html
+```
 
+- `PasswordGenerator`: allows to directly generate a password
+
+```bash
+java org.angrybee.website.publish.utils.PasswordGenerator $password-length
+```
+
+- `PDFProtectUtils`: allows you to directly encrypt a PDF in command line
+
+```bash
+java org.angrybee.website.publish.utils.PDFProtectUtils $input-pdf $output-pdf $owner-password $user-password
+```
+
+- `PDFWatermarkUtils`: allows you to directly add watermark to all pages of a PDF
+
+```bash
+java org.angrybee.website.publish.utils.PDFWatermarkUtils $input-pdf $output-pdf $watermark-text
+```
 
 
 
 # The Angrybee publication process
 
+Initially, the library has been designed to convert my Markdown articles into web pages for my https://angrybee.tech website.
+
+From Markdown, I generate HTML pages with:
+
+- syntax coloring
+
+- copy/paste code icon
+
+- table of content automatically generated and synchronized with content navigation
+
+- animations around `<section>` tags
+
+Like HTML and PDF conversion, this process is made of 3 classes:
+
+- `PublisherAngrybee`: main class that performs to conversion process in publish() method.
+
+- `PublisherDefaultHtmlBean`: `PublisherAngrybee` uses `PublisherDefaultHtmlBean` parameters to perform the conversion
+
+- `PublicationHtml`: result of the conversion process
+
+The illustration of the process is here:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherAngrybee.png)
+
+Illustration of a generated Angrybee web page:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/angrybee-web-page.png)
 
 
 
 # How to extend
+
+You can easily extend the capabilities of this library:
+
+- without Java coding, by simply creating your own HTML and CSS templates
+
+- with Java coding by implementing the following interfaces:
+  
+  - `Publisher`: interface to extend when you want to code a specific process of conversion inside the publish() method
+  
+  - `PublisherBean`: Interface to extend to store input parameters of the conversion process
+  
+  - `Publication`: interface representing the result of the conversion process
