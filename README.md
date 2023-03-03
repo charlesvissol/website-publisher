@@ -237,8 +237,6 @@ Here an illustration of style customization:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherDefaultHtml-with-custo-html-css.png)
 
-
-
 - with Java coding by implementing the following interfaces:
   
   - `Publisher`: interface to extend when you want to code a specific process of conversion inside the `publish()` method
@@ -251,4 +249,4 @@ Here an illustration of a custom publication process:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherCustom.png)
 
-The $Custom variable is corresponding to your own implementation and allows you to write your own process of publication using `JSoup`, `OpenHtmlToPdf`, `PDFBox`, etc.
+The `$Custom` variable is corresponding to your own implementation and allows you to write your own process of publication using `JSoup`, `OpenHtmlToPdf`, `PDFBox`, etc.
