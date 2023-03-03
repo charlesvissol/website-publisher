@@ -218,21 +218,6 @@ public class PublisherDefaultHtml implements Publisher {
 			}
 		}	
 
-		File mdFile = null;
-		//Load the file content in String
-		if(publisherBeanImpl.getMarkdown() != null){
-			mdFile = new File(publisherBeanImpl.getMarkdown());
-		} else {
-			//In case of no Markdown for input, we use default markdown to show error but not to block the process.
-			String input = resources.getString("input");	
-
-			try {
-				mdFile = new FileUtils().getFileFromResource(input);
-
-			} catch (URISyntaxException e) {
-				logger.log(Level.SEVERE, e.getMessage(), e);
-			}  			
-		}
 		
 		//Load the Markdown file content in String and convert into HTML
 		String html = null;

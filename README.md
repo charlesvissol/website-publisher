@@ -63,7 +63,9 @@ System.out.println(htmlPub.html());
 
 # Markdown to PDF
 
-To convert Markdown to PDF, you must use:
+> This publishing process requires a temporary directory available. Some kind of Files.createTempDirectory() support.
+
+ To convert Markdown to PDF, you must use:
 
 - `PublisherPdf` and its publish() method to process the conversion
 
