@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.angrybee.website.publish</groupId>
 	<artifactId>website-publisher</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>website-publisher</name>
 	<developers>
 		<developer>
