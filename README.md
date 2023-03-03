@@ -252,3 +252,7 @@ Here an illustration of a custom publication process:
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherCustom.png)
 
 The `$Custom` variable is corresponding to your own implementation and allows you to write your own process of publication using `JSoup`, `OpenHtmlToPdf`, `PDFBox`, etc.
+
+# SonarQube quality review for release 1.0
+
+![](src/main//javadoc/org/angrybee/website/publish/doc-files/release-1.0-SonarQubeReview.png)
