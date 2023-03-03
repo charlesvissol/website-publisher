@@ -105,8 +105,6 @@ pDefault.setBean(pDefaultBean);
 PublicationPdf pdfResult = (PublicationPdf) pDefault.publish();
 ```
 
-
-
 - First page sample result:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/FirstPagePdf.png)
@@ -199,8 +197,6 @@ java org.angrybee.website.publish.utils.PDFProtectUtils $input-pdf $output-pdf $
 java org.angrybee.website.publish.utils.PDFWatermarkUtils $input-pdf $output-pdf $watermark-text
 ```
 
-
-
 # The Angrybee publication process
 
 Initially, the library has been designed to convert my Markdown articles into web pages for my https://angrybee.tech website.
@@ -231,18 +227,28 @@ Illustration of a generated Angrybee web page:
 
 ![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/angrybee-web-page.png)
 
-
-
-# How to extend
+# How to extend?
 
 You can easily extend the capabilities of this library:
 
-- without Java coding, by simply creating your own HTML and CSS templates
+- without Java coding, by simply creating your own HTML and CSS templates you can modify the style produced by PublisherDefaultHtml or PublisherPdf. You need only to run `getTemplate()` method to inform the library that you want to use your own style
+
+Here an illustration of style customization:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherDefaultHtml-with-custo-html-css.png)
+
+
 
 - with Java coding by implementing the following interfaces:
   
-  - `Publisher`: interface to extend when you want to code a specific process of conversion inside the publish() method
+  - `Publisher`: interface to extend when you want to code a specific process of conversion inside the `publish()` method
   
   - `PublisherBean`: Interface to extend to store input parameters of the conversion process
   
   - `Publication`: interface representing the result of the conversion process
+
+Here an illustration of a custom publication process:
+
+![](src/main/javadoc/org/angrybee/website/publish/impl/doc-files/PublisherCustom.png)
+
+The $Custom variable is corresponding to your own implementation and allows you to write your own process of publication using `JSoup`, `OpenHtmlToPdf`, `PDFBox`, etc.
