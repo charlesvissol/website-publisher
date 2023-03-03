@@ -1,11 +1,11 @@
 package org.angrybee.website.publish.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class PasswordGeneratorTest {
+class PasswordGeneratorTest {
     @Test
     void testGeneratePassword() {
 
@@ -14,8 +14,7 @@ public class PasswordGeneratorTest {
 
         assertEquals(pswd1.length(), pswd2.length());
 
-        assertFalse(pswd1.equals(pswd2));        
-
+        assertNotEquals(pswd1, pswd2);
     }
 
 }

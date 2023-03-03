@@ -317,39 +317,39 @@ public class PublisherPdf implements Publisher{
 
 
 
-        String PATH_HTML = tempPath + File.separator + "publish-pdf-input.html";
-        String PATH_PDF = tempPath + File.separator + mdFile.getName() + ".pdf";
+        String pathHTML = tempPath + File.separator + "publish-pdf-input.html";
+        String pathPDF = tempPath + File.separator + mdFile.getName() + ".pdf";
         
         
-        String PATH_RESOURCES = null;
+        String pathRESOURCES = null;
 
         if(publisherBeanImpl.getResources() != null){
-            PATH_RESOURCES = publisherBeanImpl.getResources();
+            pathRESOURCES = publisherBeanImpl.getResources();
         } else {
-            PATH_RESOURCES = mdFile.getAbsolutePath();//By default, path of the Markdown file.
+            pathRESOURCES = mdFile.getAbsolutePath();//By default, path of the Markdown file.
         }
 
         try {
-            FileUtils.writeFromString(PATH_HTML, doc.html());
+            FileUtils.writeFromString(pathHTML, doc.html());
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
 
-        String baseUri = FileSystems.getDefault().getPath(PATH_RESOURCES).toUri().toString();
+        String baseUri = FileSystems.getDefault().getPath(pathRESOURCES).toUri().toString();
 
 
         /**
          * Create the base PDF
          */
         try {
-            this.htmlToPdf(PATH_HTML, PATH_PDF, baseUri);
+            this.htmlToPdf(pathHTML, pathPDF, baseUri);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
         try {
-            publication.setPdf(PDDocument.load(new File(PATH_PDF)));
+            publication.setPdf(PDDocument.load(new File(pathPDF)));
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -357,12 +357,12 @@ public class PublisherPdf implements Publisher{
         /**
          * Create watermark to each page
          */
-        String PATH_PDF_WATERMARK = null;
+        String pathPdfWATERMARK = null;
         if(publisherBeanImpl.getWatermark() != null){
-            PATH_PDF_WATERMARK = tempPath + File.separator + mdFile.getName() + ".watermark.pdf";
+            pathPdfWATERMARK = tempPath + File.separator + mdFile.getName() + ".watermark.pdf";
             
-            File srcFile = new File(PATH_PDF);
-            File dstFile = new File(PATH_PDF_WATERMARK);
+            File srcFile = new File(pathPDF);
+            File dstFile = new File(pathPdfWATERMARK);
 
             try (PDDocument watermarkPdf = PDDocument.load(srcFile))
             {
@@ -378,7 +378,7 @@ public class PublisherPdf implements Publisher{
         }
 
         try {
-            publication.setWatermarkPdf(PDDocument.load(new File(PATH_PDF_WATERMARK)));
+            publication.setWatermarkPdf(PDDocument.load(new File(pathPdfWATERMARK)));
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -386,14 +386,14 @@ public class PublisherPdf implements Publisher{
         /**
          * Secure PDF with password
          */
-        String PATH_PDF_IN_PROTECTED = null;
-        String PATH_PDF_OUT_PROTECTED = null;
+        String pathPdfInputPROTECTED = null;
+        String pathPdfOutputPROTECTED = null;
         if(publisherBeanImpl.getWatermark() != null){
-            PATH_PDF_IN_PROTECTED = PATH_PDF_WATERMARK;
-            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".watermark.protected.pdf";
+            pathPdfInputPROTECTED = pathPdfWATERMARK;
+            pathPdfOutputPROTECTED = tempPath + File.separator + mdFile.getName() + ".watermark.protected.pdf";
         } else {
-            PATH_PDF_IN_PROTECTED = PATH_PDF;
-            PATH_PDF_OUT_PROTECTED = tempPath + File.separator + mdFile.getName() + ".protected.pdf";
+            pathPdfInputPROTECTED = pathPDF;
+            pathPdfOutputPROTECTED = tempPath + File.separator + mdFile.getName() + ".protected.pdf";
         }
 
         /**
@@ -416,11 +416,11 @@ public class PublisherPdf implements Publisher{
         /**
          * Main process of PDF encryption
          */
-        PDFProtectUtils.protect(PATH_PDF_IN_PROTECTED, PATH_PDF_OUT_PROTECTED, ownerPassword, userPassword);
+        PDFProtectUtils.protect(pathPdfInputPROTECTED, pathPdfOutputPROTECTED, ownerPassword, userPassword);
 
 
         try {
-            publication.setProtectedPdf(PDDocument.load(new File(PATH_PDF_OUT_PROTECTED), userPassword));
+            publication.setProtectedPdf(PDDocument.load(new File(pathPdfOutputPROTECTED), userPassword));
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }

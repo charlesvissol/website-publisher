@@ -54,7 +54,7 @@ class Md2HtmlTest {
 
 		//Read Line by line the result/expected file and verify if it is equals
 		for (int i = 0; i < resultListExpected.size(); i++) {
-			assertTrue(resultListExpected.get(i).equals(resultListToCompare.get(i)));
+			assertEquals(resultListExpected.get(i), resultListToCompare.get(i));
 			logger.info("Expected=" + resultListExpected.get(i) + "||" + resultListToCompare.get(i));
 		  }
 		
@@ -100,7 +100,7 @@ class Md2HtmlTest {
 
 		//Read Line by line the result/expected file and verify if it is equals
 		for (int i = 0; i < resultListExpected.size(); i++) {
-			assertTrue(resultListExpected.get(i).equals(resultListToCompare.get(i)));
+			assertEquals(resultListExpected.get(i), resultListToCompare.get(i));
 			logger.info("Expected=" + resultListExpected.get(i) + "||" + resultListToCompare.get(i));
 		  }
 
