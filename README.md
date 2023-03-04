@@ -1,3 +1,6 @@
+
+<img src="website-publisher.svg" alt="website-publisher logo" width="500">
+
 # website-publisher
 
 `website-publisher` is a Java library to convert any Markdown content into: HTML or PDF.
