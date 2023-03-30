@@ -1,5 +1,5 @@
 
-<img src="website-publisher.png" alt="website-publisher logo" width="500">
+<img src="website-publisher.png" alt="website-publisher logo">
 
 # website-publisher
 
